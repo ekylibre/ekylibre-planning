@@ -5,7 +5,7 @@ require "planning/version"
 
 # Describe your gem and declare its dependencies:
 Gem::Specification.new do |s|
-  s.name        = "ekylibre-planning"
+  s.name        = "planning"
   s.version     = Planning::VERSION
   s.authors     = ["Ekylibre"]
   s.email       = ["dev@ekylibre.com"]
