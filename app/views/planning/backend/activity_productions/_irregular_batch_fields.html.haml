@@ -1,0 +1,12 @@
+.nested-fields
+  %div
+    = :batch.tl
+    %span.batch-number
+
+  = f.input :estimated_sowing_date
+  = f.input :area, wrapper: :append do
+    = f.input_field :area
+    %span.add-on
+      ha
+  = link_to_remove_association f do
+    %i.picto.picto-clear

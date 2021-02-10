@@ -1,0 +1,24 @@
+.plan-charge {
+  position: relative;
+
+  .plan-charge-filters {
+    position: fixed;
+    right: 20px;
+  }
+
+  & > .bar-chart {
+    position: absolute;
+    left: 0;
+    top: 0;
+    pointer-events: none;
+  }
+
+  #bar-chart {
+    overflow-x: scroll;
+  }
+
+  .picto-circle-o-notch {
+    position: fixed;
+    top: 250px;
+  }
+}

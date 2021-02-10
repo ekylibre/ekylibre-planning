@@ -1,0 +1,16 @@
+.plot
+  = f.referenced_association :technical_itinerary,
+  new: false,
+  source: { controller: '/planning/technical_itineraries',
+    scope: { of_activity: scenario_activity&.activity_id }},
+  wrapper_html: {class: 'technical-itinerary'}
+  .date-part
+    = f.input :planned_at, label: :predicated_sowing_date.tl
+    .batch-planting-part
+      = f.input :batch_planting, wrapper: :inline_checkbox, wrapper_html: { class: 'batch-planting' }
+      %i.picto.picto-edit.edit_batch_planting{ as: :link, class: (:hidden unless f.object.batch_planting) }
+
+      = render '/planning/backend/activity_productions/batch_modal', f: f
+
+  = f.input :area, hint: 'ha', wrapper: :middle_hint
+  = link_to_remove_association :delete_parcel.tl, f, { wrapper_class: 'plot' }, data: { confirm: 'are your sure ?' }

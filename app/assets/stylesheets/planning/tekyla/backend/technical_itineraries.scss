@@ -1,0 +1,128 @@
+/*
+  Place all the styles related to the matching controller here.
+  They will automatically be included in application.css.
+*/
+
+.templates-association {
+  display: flex;
+  align-items: flex-end;
+
+  &.sortable-ghost {
+    opacity: 0;
+  }
+
+  .control-group {
+  	display: flex;
+    flex-basis: 16%;
+  }
+
+  .control-group .controls {
+  	display: flex;
+    margin-left: 0 !important;
+    max-width: none;
+
+    input {
+      width: 40%;
+    }
+
+ 	.add-on {
+ 	  display: flex;
+ 	  flex-basis: 15%;
+ 	  justify-content: center;
+      margin-left: -5px
+    }
+
+    .btn.btn-success {
+      width: 16%;
+    }
+
+    .picto-check {
+      min-width: 10px;
+    }
+  }
+
+  .edit-association, .remove-association {
+    i {
+      font-size: 20px;
+    }
+  }
+}
+
+.new-template {
+  display: flex;
+  align-items: flex-end;
+
+  .control-group {
+    flex-basis: 16%;
+  }
+
+  .control-group .controls {
+    margin-left: 0 !important;
+    max-width: none;
+
+    .day-between {
+      width: 25%;
+    }
+
+    .add-on {
+      margin-left: -5px
+    }
+  }
+}
+
+.template-part {
+  border: 1px solid #dedede;
+  border-radius: 3px;
+  padding: 3px;
+  width: 13%;
+  max-width: 72%;
+  min-height: 21px;
+  margin-top: 3px;
+  margin-bottom: 3px;
+  cursor: pointer;
+
+  p {
+    font-size: 11px;
+    font-style: italic;
+    line-height: 1.618em;
+    text-align: right;
+  }
+}
+
+#duration-modal {
+  .modal-body .controls {
+    width: 50%;
+  }
+}
+
+.cobble .cobble-body .cobble-content .columns {
+  display: flex;
+  justify-content: flex-start;
+  .col-left {
+    flex-basis: 25%;
+  }
+}
+
+.new_technical_itinerary {
+  .new-template-errors {
+    margin-top: 0.5em;
+  }
+
+  .errors {
+    color: $invalid-color;
+    font-size: $fs-small;
+  }
+}
+
+#technical_itinerary_form {
+  .itinerary_templates .templates-association,
+  .itinerary_templates .new-template {
+    .planning_technical_itinerary_intervention_template_day_between_intervention input {
+      text-align: center;
+    }
+  }
+
+  .itinerary_templates #duration-modal .modal-form input {
+    text-align: center;
+  }
+}

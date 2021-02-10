@@ -1,0 +1,2 @@
+module Planning::ScenariosHelper
+end

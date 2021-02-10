@@ -1,0 +1,53 @@
+.technical-itinerary-show
+  -main_toolbar do |t|
+    = t.edit resource
+    = t.duplicate id: :duplicate_technical_itinerary if resource.is_duplicatable?
+    = t.destroy
+
+  = main_informations do
+    = attributes_list do |l|
+      - l.attribute :activity, url: { controller: "backend/activities", action: :show, id: resource.activity.id }
+      - l.attribute :description
+
+  = cobbles do |c|
+    - c.cobble(:technical_itinerary_parameters) do
+      .columns
+        .col-left
+          .big-info
+            %span.title= :duration.tl
+            %span.value
+              = resource.human_duration
+
+          .big-info
+            %span.title= :time_per_hectare.tl
+            %strong.value
+              = resource.human_global_workload
+
+          - %i(tools doers).each do |type|
+            .big-info
+              %span.title= "#{type}_workload".tl
+              %span.value
+                = resource.human_parameter_workload(type)
+
+        .col-right
+          .big-info
+            %span.title= :average_yield.tl
+            %span.value
+              = resource.average_yield
+
+          .big-info
+            %span.title= :global_cost.tl
+            %strong.value
+              _
+
+          - %i(tools doers).each do |type|
+            .big-info
+              %span.title= "#{type}_cost".tl
+              %span.value
+                _
+
+    - c.cobble(:intervention_templates_list) do
+      = cobble_list :intervention_templates
+
+    - c.cobble(:activity_productions_list) do
+      = cobble_list :activity_productions

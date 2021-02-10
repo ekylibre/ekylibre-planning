@@ -1,0 +1,110 @@
+- prefix = namespace + "[#{f.index}]"
+- f.object.reference_name = reference.name
+.nested-fields.nested-product-parameter{class: "nested-#{reference.name.to_s.parameterize}", data: { intervention_parameter: reference.name } }
+  = link_to_remove_nested_association(:destroy.ta, f)
+  = f.input :reference_name, as: :hidden
+  - if f.object.intervention
+    - if f.object.intervention.started_at
+      - started_at = f.object.intervention.started_at
+    - else
+      - started_at = f.object.intervention.working_periods.map(&:started_at).min
+
+  - started_at ||= Time.now
+  - if reference.output?
+    = f.referenced_association :variant, label: reference.human_name, source: { controller: 'backend/product_nature_variants', scope: reference.scope_hash.merge(availables: true)}, input_html: { data: { intervention_updater: prefix + 'variant_id' }}
+    -#= f.referenced_association :product, as: :hidden, input_html: { data: { intervention_updater: prefix + 'product_id' }}
+  - else
+    - if f.object.reference_name.to_sym == :cultivation
+      .control-group.land-parcel-plant-selector
+        = label_tag :target.tl, nil, class: 'control-label'
+
+        .controls
+          = radio_button_tag 'target', 'plant', f.object.decorate.plant?, class: 'plant-radio-button'
+          = label_tag :plant.tl
+          = radio_button_tag 'target', 'land_parcel', f.object.decorate.land_parcel?, class: 'land-parcel-radio-button'
+          = label_tag :land_parcel_name.tl
+
+      = f.referenced_association :product, label: reference.human_name, source: { controller: 'backend/products', scope: reference.scope_hash.merge(availables: [at: started_at.strftime("%Y-%m-%d %H:%M")], of_expression: product_expression(f.object)), keep: true }, input_html: { class: "scoped-parameter", data: { intervention_updater: prefix + 'product_id', harvest_in_progress_error_message: t('errors.messages.harvest_in_progress') } }, new: false
+    - else
+      = f.referenced_association :product, label: reference.human_name, source: { controller: 'backend/products', scope: reference.scope_hash.merge(availables: [at: started_at.strftime("%Y-%m-%d %H:%M")]), keep: true }, input_html: { class: "scoped-parameter", data: { intervention_updater: prefix + 'product_id', harvest_in_progress_error_message: t('errors.messages.harvest_in_progress') } }, new: false
+
+    - if reference.tool?
+      .tool-nested-readings.hidden
+        = f.nested_association :readings, partial: '/backend/interventions/hour_counter_fields', maximum: 1
+
+
+  - if reference.doer? || reference.tool?
+    - if !f.object.new_record?
+      - participation_picto = f.object.participation.nil? ? 'timer-off' : 'timer'
+      - datas = { participation: f.object.participation.id  } unless f.object.participation.nil?
+      %div{ class: "has-intervention-participations picto picto-#{participation_picto}", data: datas }
+
+      - decorated_object = f.object.decorate
+      - if decorated_object.participation?
+        - field_name = "intervention[participations_attributes][#{ decorated_object.participation.id }]"
+        - field_value = decorated_object.participation_to_json
+        = hidden_field_tag field_name, field_value, { class: 'intervention-participation', data: { product_id: f.object.product_id }}
+
+
+    = modal(id: "working_times", class: "working-times", size: :large) do
+      .modal-body
+      .modal-footer
+  - if reference.quantified?
+    = render '/backend/interventions/quantifier_field', f: f, reference: reference, prefix: prefix
+  - if (attr = reference.attribute(:new_name))
+    - if attr.hidden?
+      - if reference.procedure.of_category?(:planting)
+        = f.input :variety, as: :hidden, input_html: { data: { intervention_updater: prefix + 'variety' }}
+        = f.input :batch_number, as: :hidden, input_html: { data: { intervention_updater: prefix + 'batch_number' }}
+      - else
+        = f.input :new_name, as: :hidden, input_html: { data: { intervention_updater: prefix + 'new_name' }}
+    - else
+      - if reference.procedure.of_category?(:planting)
+        = f.input :variety, input_html: { data: { intervention_updater: prefix + 'variety' }}
+        = f.input :batch_number, input_html: { data: { intervention_updater: prefix + 'batch_number' }}
+      - else
+        = f.input :new_name, input_html: { data: { intervention_updater: prefix + 'new_name' }}
+
+  - if (attr = reference.attribute(:identification_number))
+    - if attr.hidden?
+      = f.input :identification_number, as: :hidden, input_html: { data: { intervention_updater: prefix + 'identification_number' }}
+    - else
+      = f.input :identification_number, input_html: { data: { intervention_updater: prefix + 'identification_number' }, disabled: (f.object.product.present? and f.object.product.identification_number) ? true : false }
+  - if (attr = reference.attribute(:new_container))
+    = f.referenced_association :new_container, source: { scope: reference.attribute(:new_container).scope_hash.merge(availables: [at: started_at.strftime("%Y-%m-%d %H:%M")]), keep: true }, input_html: { class: "scoped-parameter", data: { intervention_updater: prefix + 'new_container_id' } }, new: false
+
+  - if (attr = reference.attribute(:new_group))
+    = f.referenced_association :new_group, source: { scope: reference.attribute(:new_group).scope_hash.merge(availables: [at: started_at.strftime("%Y-%m-%d %H:%M")]), keep: true }, input_html: { class: "scoped-parameter", data: { intervention_updater: prefix + 'new_group_id' } }, new: false
+
+  - if (attr = reference.attribute(:new_variant))
+    - if attr.hidden?
+      = f.input :new_variant_id, as: :hidden, input_html: { data: { intervention_updater: prefix + 'new_variant_id' }}
+    - else
+      = f.input :new_variant_id, input_html: { data: { intervention_updater: prefix + 'new_variant_id' }}
+
+  - if reference.attribute(:working_zone)
+    - if user_preference_value(User::PREFERENCE_SHOW_MAP_INTERVENTION_FORM, true)
+      = f.geometry :working_zone, { show: {}, input_html: { data: { intervention_updater: prefix + 'working_zone' }}, editor: {useFeatures: true, overlaySelector: { editionLayer: f.object.human_attribute_name(:working_zone) }, dynamic_series: backend_map_editor_shapes_path(layers: [:land_parcels, :plants], started_at: started_at)} }
+    - else
+      - working_zone = f.object.working_zone.to_json if f.object.working_zone.present?
+      = f.geometry :working_zone, { as: :hidden, no_map: true, show: false, input_html: { value: working_zone, data: { intervention_updater: prefix + 'working_zone' }} }
+
+  - if reference.attribute(:killable)
+    = f.yes_no_radio :dead, label: reference.killable_question
+  - if reference.component_of?
+    = render '/backend/interventions/component_field', f: f, reference: reference, prefix: prefix
+
+
+  - if reference.readings.any?
+    - reference.readings.each do |reading|
+      - unless f.object.readings.detect{|r| r.indicator_name.to_s == reading.name.to_s }
+        - f.object.readings.new(indicator_name: reading.name)
+    = f.simple_fields_for(:readings, f.object.readings) do |r|
+      - ref = reference.reading(r.object.indicator_name)
+      - next unless ref
+      = r.reading as: (ref.accessible? ? nil : :hidden), input_html: { data: { intervention_updater: prefix + 'readings' }}
+
+  .errors
+    - if reference.display_status
+      %span{class: reference.display_status}
+        = :"parameter_error_#{reference.display_status}".tl

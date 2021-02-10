@@ -1,0 +1,42 @@
+#activity_production_batch .irregular-batches .nested-fields {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 20px;
+  .remove_fields {
+    position: absolute;
+    left: 93%;
+    top: 20%;
+  }
+}
+
+.batches_repartition {
+  .advanced-mode {
+    text-align: right
+  }
+}
+
+#activity_production_batch {
+  text-align: left;
+  .picto {
+    font-size: 20px;
+  }
+  .modal-dialog {
+    width: 70%;
+  }
+  .control-group {
+    .control-label {
+      max-width: 35%
+    }
+    .controls {
+      margin-left: 35%
+    }
+  }
+}
+
+#technical-itinerary-association {
+  .edit_batch_planting {
+    font-size: 25px;
+    margin-left: 15px;
+    color: rgb(63, 112, 206);
+  }
+}

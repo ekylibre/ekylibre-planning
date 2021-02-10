@@ -1,0 +1,171 @@
+= modal_header(intervention_modal_title(intervention_proposal))
+
+- disable_fields = false
+- disable_fields = true unless can_edit?(params)
+
+
+.modal-body.modal-proposed-intervention{ data: { date: intervention_proposal.estimated_date,
+    proposal_id: intervention_proposal.id,
+    procedure: intervention_proposal.technical_itinerary_intervention_template.intervention_template.procedure_name }}
+  .indicators
+    .med-info
+      %span.title
+        = :date.tl
+      %span.value
+        %i.picto.picto-clock-o
+        = intervention_proposal.estimated_date.l
+    .flex-part
+      .med-info
+        %span.title
+          = :estimated_working_time.tl
+        %span.value
+          %i.picto.picto-timelapse
+          %span#estimated-working-time
+            = intervention_proposal.human_estimated_working_time
+
+      .med-info
+        %span.title
+          = :estimated_cost.tl
+        %span.value
+          %i.picto.picto-timelapse
+          = "- €"
+    - if activity.present?
+      .intervention-activities
+        .proposal-activity.label{ style: "color: #{contrasted_color(activity.color)}; background-color: #{activity.color};" }
+          = activity.name
+
+  .parcel
+    %strong
+      = "#{:land_parcel_name.tl} :"
+      = intervention_proposal.activity_production.support.name
+
+  = planning_form_for(Intervention.new, url: update_proposal_planning_schedulings_path, method: :put, remote: true) do |f|
+    .targets
+      %strong
+        = "#{:target.tl} :"
+
+      - product_targets(intervention_proposal).each_with_index do |p, index|
+        %span.target
+          %input{ type: :radio, id: p[:name], name: :target, value: p[:name], checked: is_checked?(intervention_proposal, p, index), disabled: disable_fields }
+          %label{ for: p[:name], name: :target, value: p[:name] }
+            = p[:human_name]
+
+    = f.simple_fields_for(f.object.targets.new(new_target_params(intervention_proposal))) do |p|
+      .product-target
+        .picture
+          %i.picto.picto-land-parcels
+        = p.referenced_association :product,
+        label: false,
+        source: { controller: 'backend/products', scope: product_scope(intervention_proposal) },
+        disabled: disable_fields,
+        input_html: { class: "scoped-parameter",
+          data: { intervention_updater: 'targets[0]product_id',
+                  activity_production: intervention_proposal.activity_production.id,
+                  support_id: intervention_proposal.activity_production.support.id,
+                  land_parcel_name: intervention_proposal.activity_production.support.name }}, new: false
+
+    .parameters
+      - %i(doers tools).each do |type|
+        - if intervention_proposal.technical_itinerary_intervention_template.intervention_template.send(type).any?
+          .parameter-type{data: { type: type }}
+            .title
+              %strong
+                = type == :doers ? Intervention.human_attribute_name(type) : :equipments.tl
+            - intervention_proposal.technical_itinerary_intervention_template.intervention_template.send(type).each_with_index do |t, index|
+              .parameter-element
+                .picture
+                  %i{ class: "picto picto-#{ type.to_s.singularize }" }
+                .procedure
+                  %h2
+                    = t.product_nature&.name || t.product_nature_variant.name
+                  = t.procedure['name']
+                  = f.simple_fields_for(f.object.send(type).new(product_id: doer_tool_product_id(type, t, intervention_proposal, index))) do |p|
+                    - date = intervention_proposal.estimated_date.strftime("%Y-%m-%d %H:%M")
+                    - nature = t.product_nature
+                    - product_type = (type == :tools ? 'Equipment' : 'Worker')
+                    = p.referenced_association :product,
+                    label: false,
+                    disabled: disable_fields,
+                    input_html: { data: { product_nature: nature.id, product_parameter_id: t.id }},
+                    source: { controller: 'planning/backend/products', scope: { of_nature: nature, availables: [at: date], actives: [type: product_type, at: date]}, partial_unroll: 'true' },
+                    new: false,
+                    allow_nil: true
+
+    .parameters.inputs-outputs
+      - if intervention_proposal.technical_itinerary_intervention_template.intervention_template.send(:inputs).any?
+        .parameter-type{data: { type: :inputs }}
+          .title
+            %strong
+              = Intervention.human_attribute_name(:inputs)
+          - intervention_proposal.technical_itinerary_intervention_template.intervention_template.send(:inputs).each_with_index do |t, index|
+            .parameter-element
+              .picture
+                %i{ class: "picto picto-wheat" }
+              .procedure
+                .product-name
+                  %h2
+                    = t.product_nature&.name || t.product_nature_variant.name
+                  = t.procedure['name']
+                .input-part
+                  = f.simple_fields_for(f.object.inputs.new) do |p|
+                    - parameter = intervention_proposal.parameters.order(:id).of_product_type(:input)[index]
+                    - if parameter
+                      - p.object.product_id = parameter&.product_id
+                      - quantity_value = parameter.quantity
+                      - unit_value = parameter.unit
+                    - else
+                      - quantity_value = t.quantity
+                      - unit_value = Onoma::Unit.find(t.unit)&.dimension
+                    = p.referenced_association :product,
+                    label: false,
+                    disabled: disable_fields,
+                    input_html: {data: { product_nature: t.product_nature_variant.id, product_parameter_id: t.id }},
+                    source: { controller: 'backend/products', scope: { of_variant: t.product_nature_variant }},
+                    new: false
+
+                    = f.simple_fields_for :quantity do |o|
+                      = o.input :quantity, label: false, as: :integer, input_html: { value: quantity_value }
+                      = o.input :unit,
+                      required: false,
+                      label: false,
+                      as: :select,
+                      collection: list_of_unities(t.intervention_template.procedure.parameters.select { |p| p.name == t.procedure['type'].to_sym }.first).map { |h| [h[:human_name], h[:name ]] },
+                      selected: (unit_value)
+
+      - if intervention_proposal.technical_itinerary_intervention_template.intervention_template.send(:outputs).any?
+        .parameter-type{data: { type: :outputs }}
+          .title
+            %strong
+              = Intervention.human_attribute_name(:outputs)
+          - intervention_proposal.technical_itinerary_intervention_template.intervention_template.send(:outputs).each_with_index do |t, index|
+            .parameter-element
+              .picture
+                %i{ class: "picto picto-wheat" }
+              .procedure
+                %h2
+                  = t.product_nature&.name || t.product_nature_variant.name
+                = t.procedure['name']
+                .output-part
+                  = f.simple_fields_for(f.object.outputs.new(variant: t.product_nature_variant)) do |p|
+                    = p.referenced_association :variant,
+                    label: false,
+                    source: { controller: 'backend/product_nature_variants', scope: { of_id: t.product_nature_variant.id }},
+                    disabled: disable_fields,
+                    new: false
+
+                  - if t.procedure['type'] != 'plant'
+                    = f.simple_fields_for :quantity do |o|
+                      = o.input :quantity, label: false, as: :integer, input_html: { value: intervention_proposal.parameters.of_product_type('output')[index]&.quantity }
+                      = o.input :unit,
+                      required: false,
+                      label: false,
+                      as: :select,
+                      collection: list_of_unities(t.intervention_template.procedure.parameters.select { |p| p.name == t.procedure['type'].to_sym }.first).map { |h| [h[:human_name], h[:name ]] },
+                      selected: intervention_proposal.parameters.of_product_type('output')[index]&.unit
+
+.modal-footer
+  - button_disabled = false
+  - button_disabled = true unless can_edit?(params)
+  = link_to :save.tl, '#', disabled: button_disabled, class: "btn btn-default", id: 'save-intervention-proposal'
+  = link_to :more_details.tl, '#', disabled: button_disabled, class: "btn btn-default", id: 'new-detailed-intervention'
+  = link_to :plan.tl, '#', disabled: button_disabled, class: "btn btn-primary", id: 'plan-intervention'

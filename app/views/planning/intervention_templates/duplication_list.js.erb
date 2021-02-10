@@ -1,0 +1,3 @@
+$('#duplicate_intervention_templates').remove()
+$('body').append("<%= escape_javascript(render partial: 'duplication_modal')%>");
+$('#duplicate_intervention_templates').modal('show')

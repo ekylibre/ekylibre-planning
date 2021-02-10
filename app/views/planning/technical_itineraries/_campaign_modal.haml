@@ -1,0 +1,13 @@
+= modal(id: 'campaign_of_duplicate_technical_itinerary', size: :large) do
+  = form_tag(new_planning_technical_itinerary_path, method: :get) do
+    .modal-header
+      %h4.modal-title= :duplicate_technical_itinerary.tl
+    .modal-body
+      = label_tag(:duplicate_on_campaign.tl)
+      = select_tag(:campaign_id, options_from_collection_for_select(@technical_itinerary.campaign.followings, :id, :name))
+      = hidden_field_tag(:originator_id, @technical_itinerary.id)
+    .modal-footer
+      = button_tag(:cancel.tl, class: 'btn btn-default', data: { dismiss: 'modal' })
+      = submit_tag(:validate.tl, class: 'btn primary')
+
+= yield(:popover)

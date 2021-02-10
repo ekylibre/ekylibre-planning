@@ -1,0 +1,34 @@
+.modal.fade#activity_production_batch{ aria_labelledby: 'activityProductionBatch', class: "batch-modal-#{SecureRandom.hex}" }
+  .modal-dialog
+    .modal-content
+      .modal-header.modal-header-generic
+        %h4.modal-title= :batch_planting.tl
+      .modal-body
+        = field_set :batches_repartition do
+          = f.simple_fields_for(:batch, f.object.batch || f.object.build_batch) do |b|
+            .regular-batch
+              = b.input :number, label: :number_quantity.tl, wrapper: :append, input_html: { data: {old_value: 0}} do
+                = b.input_field :number
+                %span.add-on
+                  = :batches.tl
+              = b.input :day_interval, wrapper: :append do
+                = b.input_field :day_interval
+                %span.add-on
+                  = :days.tl
+            = b.input :irregular_batch, as: :hidden, wrapper_html: { class: 'irregular-batch' }
+            .advanced-mode
+              = link_to '#', id: :advanced_mode do
+                %span.advanced-operator
+                  %i.picto.picto-plus
+                = :advanced_mode.tl
+            .irregular-batches.hidden
+              = b.simple_fields_for(:irregular_batches) do |ib|
+                = render partial: '/planning/backend/activity_productions/irregular_batch_fields', locals: { f: ib }
+              .links
+                = link_to_add_association :add_irregular_batch.tl, b, :irregular_batches, partial: 'planning/backend/activity_productions/irregular_batch_fields'
+
+      .modal-footer
+        %button.close.btn.btn-default
+          = :close.tl
+        %button.validate.btn.primary
+          = :validate.tl

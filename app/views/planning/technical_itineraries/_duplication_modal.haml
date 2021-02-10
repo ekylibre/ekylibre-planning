@@ -1,0 +1,19 @@
+= modal(id: 'technical_itinerary_duplication_modal', size: :large) do
+  = form_tag(new_planning_technical_itinerary_path, method: :get) do
+    .modal-header
+      %h4.modal-title= :select_the_intervention_model_to_duplicate.tl
+    .modal-body
+      - if @unvalid_duplicate_intervention_templates.present?
+        .unvalid.flash.warning
+          = :warning_this_models_x_are_already_duplicated_html.tl(models: @unvalid_duplicate_intervention_templates.map(&:name).to_sentence).html_safe
+      = hidden_field_tag(:originator_id, @technical_itinerary.originator_id)
+      = hidden_field_tag(:campaign_id, @technical_itinerary.campaign_id)
+      = hidden_field_tag(:modal_computed, true)
+      - @unduplicate_intervention_templates.each do |intervention_template|
+        .intervention_template
+          = check_box_tag('to_duplicate_collection[]', intervention_template.id, true)
+          = h intervention_template.label
+    .modal-footer
+      -# = link_to :cancel.tl, planning_technical_itinerary_path(@technical_itinerary.originator), class: 'btn btn-default'
+      = button_tag(:cancel.tl, class: 'btn btn-default', data: { dismiss: 'modal' })
+      = submit_tag(:validate.tl, class: 'btn primary')

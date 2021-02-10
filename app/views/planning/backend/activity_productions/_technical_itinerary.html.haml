@@ -1,0 +1,11 @@
+= content_tag :div, id: 'technical-itinerary-association', data: { activity: f.object.activity_id } do
+  = f.referenced_association :technical_itinerary, new: false, source: { controller: 'planning/technical_itineraries', scope: { of_campaign: f.object.campaign, of_activity: f.object.activity }}
+
+  .technical_itinerary_advanced{ class: ('hidden' unless f.object.technical_itinerary.present?) }
+    = f.input :predicated_sowing_date
+    = f.input :batch_planting, wrapper: :append, label: false do
+      = f.input_field :batch_planting
+      %label= :batch_planting.tl
+      %i.picto.picto-edit.edit_batch_planting{ as: :link }
+
+  = render '/planning/backend/activity_productions/batch_modal', f: f

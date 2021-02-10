@@ -1,0 +1,500 @@
+.schedulings-calendar {
+  height: 100%;
+
+  .hide-intervention-proposal {
+    margin-left: 15px;
+    label {
+      line-height: initial;
+      margin-left: 2px;
+    }
+  }
+
+  .open-modal, .week-proposal {
+    cursor: pointer;
+  }
+
+  .periods {
+    .period  {
+      opacity: 0.6;
+    }
+    .markers .interventions {
+      .yellow {
+        background-color: #eacf0d;
+      }
+      .green {
+        background-color: #05b905;
+      }
+      .orange {
+        background-color: #f36a0a;
+      }
+      .marker .picto {
+        color: white;
+        filter: alpha(opacity=60)
+      }
+    }
+  }
+
+
+  &-filters {
+    margin-top: 2em;
+    .hide-intervention-proposal {
+      @include flex-row(flex-end);
+      padding-right: 1em;
+      margin-top: 5px;
+      label {
+        line-height: unset;
+      }
+    }
+    .week-selectors {
+      @include flex-row(space-between);
+      padding-right: 1em;
+      padding-left: 1em;
+
+      .selector {
+        flex-basis: 6%;
+      }
+    }
+
+    .kujaku {
+      margin-top: 2em;
+    }
+
+    .kujaku .feathers {
+      @include flex-column(flex-start);
+    }
+
+    .feathers .feather {
+      width: 100%;
+    }
+
+    .feathers .feather:first-child {
+      @include flex-row(space-between);
+    }
+
+    .feather label {
+      margin-right: 1em;
+    }
+
+    .feathers .details .picto {
+      font-size: $fs-large;
+      line-height: $topbar-height;
+      min-width: $topbar-height;
+    }
+  }
+
+  &-columns {
+    @include flex-column(flex-start, flex-start);
+    padding: 2em 1em;
+    min-height: 100%;
+  }
+
+  .day-columns,
+  .datas-columns {
+    @include flex-row(flex-start, center);
+    width: 100%;
+  }
+
+  .day-columns {
+    margin-top: 2em;
+  }
+
+  .datas-columns {
+    align-items: stretch;
+    height: 100%;
+  }
+
+  .day-column,
+  .datas-column {
+    @include flex-column(center, flex-start);
+    flex: 1;
+    margin: 0 0.5em;
+    height: auto;
+    border: $menu-border;
+    border-radius: 5px;
+
+    .column-header {
+      @include flex-row(flex-start);
+      width: 100%;
+      height: 3em;
+    }
+
+    .column-header .column-label {
+      margin-left: 10%;
+      font-weight: bold;
+    }
+
+    .column-header--fixed {
+      position: fixed;
+      background-color: $white;
+      z-index: 6;
+      width: 11%;
+    }
+  }
+
+  .day-column {
+    border-bottom-left-radius: 0;
+    border-bottom-right-radius: 0;
+  }
+
+  .datas-column {
+    align-items: stretch;
+	border-top: 0;
+    border-top-left-radius: 0;
+    border-top-right-radius: 0;
+    @include calc(min-height, "100vh - #{$header-height + $topbar-height + $toolbar-height}");
+    height: auto;
+  }
+
+  .datas-columns {
+    width: 100%;
+
+    &.columns-empty .datas-column {
+      @include calc(height, "100vh - #{$header-height + $topbar-height + $toolbar-height}");
+    }
+  }
+}
+
+.intervention {
+  @include flex-column(flex-start, center);
+  margin: 0.5em;
+  padding: 0.5em;
+  background-color: $white;
+  border-radius: 3px;
+  border: $menu-border-width dashed $default-border-color;
+  cursor: pointer;
+
+  &.sortable-ghost {
+    opacity: 0;
+  }
+
+  .intervention-name {
+    font-weight: bold;
+  }
+
+  .intervention-datas {
+    margin-top: 0.5em;
+
+    .intervention-data {
+      @include flex-row();
+      padding: 0.5em;
+      border-radius: 5px;
+      margin-top: 5px;
+    }
+
+    .picto {
+      margin-right: 0.5em;
+      font-size: $fs-large;
+      min-width: initial;
+      line-height: initial;
+    }
+
+    .intervention-data .land-parcel-name {
+      font-size: $fs-normal;
+      font-weight: bold;
+      line-height: initial;
+    }
+  }
+
+  &.proposed-intervention {
+    border: $menu-border-width dashed $default-border-color;
+
+    .intervention-name {
+      opacity: 0.6;
+    }
+
+    .intervention-datas .intervention-data {
+      opacity: 0.6;
+    }
+  }
+
+  &.planned-intervention {
+    border: $menu-border-width solid $default-border-color;
+  }
+
+  &.sortable-ghost {
+    opacity: 0;
+  }
+}
+
+
+#create-intervention-modal {
+  .modal-content {
+    width: 100%;
+  }
+
+  .modal-body.modal-proposed-intervention .indicators {
+    @include flex-column(initial, initial);
+  }
+
+  .modal-body .indicators {
+    text-align: center;
+
+    .flex-part {
+      display: flex;
+      justify-content: space-around;
+    }
+
+    .intervention-activities {
+      text-align: left;
+      margin-bottom: 6px;
+      .proposal-activity {
+        padding: 6px;
+      }
+    }
+  }
+  .parcel {
+    border-top: 1px solid #e5e5e5;
+    padding: 5px;
+  }
+  .targets {
+    border-top: 1px solid #e5e5e5;
+    border-bottom: 1px solid #e5e5e5;
+    padding: 5px;
+  }
+  .product-target {
+    display: flex;
+    align-items: center;
+    margin-top: 5px;
+    padding: 5px;
+    .control-group .controls {
+      margin-left: 0px;
+      .selector {
+        width: 360px;
+      }
+    }
+    .intervention_intervention_target_product {
+      width: 100%;
+    }
+  }
+  .picto {
+    font-size: 40px;
+    line-height: 35px;
+  }
+  .picture {
+    height: 35px;
+  }
+
+  .parameters {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 15px;
+    .procedure {
+      width: 100%;
+      max-width: 364px;
+      line-height: 11px;
+      h2 {
+        font-weight: 900;
+      }
+    }
+
+    .parameter-type {
+      display: inline-table;
+      width: 50%;
+      .title {
+        border-bottom: 1px solid #e5e5e5;
+      }
+      .parameter-element {
+        display: flex;
+        margin-top: 7px;
+        .control-group .controls {
+          margin-left: 0px;
+          max-width: 90%;
+          .items-list {
+            min-width: 0;
+            width: max-content;
+            max-width: 620px;
+            strong {
+              margin-left: 5px;
+            }
+          }
+          .selector {
+            width: 100%;
+            .items-list .item {
+              position: relative;
+              padding-right: 70px;
+              strong {
+                margin-left: auto;
+                line-height: 15.6px;
+              }
+              .amount-part {
+                position: absolute;
+                right: 0;
+                width: 70px;
+                text-overflow: ellipsis;
+                overflow: hidden;
+                font-weight: bold;
+                text-align: right;
+                padding-right: 2px;
+              }
+            }
+          }
+          input {
+            max-width: none;
+          }
+        }
+        .picto {
+          font-size: 55px;
+          line-height: 53px;
+        }
+        .picture {
+          height: 54px;
+        }
+      }
+    }
+  }
+  .inputs-outputs {
+    display: block;
+    .parameter-type {
+      width: 100%;
+      .input-part, .output-part {
+        display: flex;
+        .intervention_intervention_input_product {
+          min-width: 43%;
+        }
+        .intervention_quantity_quantity {
+          width: 10%;
+          input {
+            max-width: 72% !important;
+          }
+        }
+        .quantity_unit {
+          width: 15%;
+          input {
+            max-width: 72% !important;
+          }
+        }
+      }
+      .procedure {
+        max-width: none;
+      }
+    }
+  }
+}
+
+#duplicate-modal {
+  .errors {
+    border: 1px solid rgba(216, 30, 8, 0.22);
+    background: rgba(216, 30, 8, 0.2);
+    color: #c91c07;
+    border-radius: 2px;
+    padding: 3px;
+  }
+  .targets {
+    border-top: 1px solid #e5e5e5;
+    border-bottom: 1px solid #e5e5e5;
+    padding: 5px;
+  }
+  .product-target {
+    display: flex;
+    align-items: center;
+    margin-top: 5px;
+    padding: 5px;
+    .control-group .controls {
+      margin-left: 0px;
+      .selector {
+        width: 360px;
+      }
+    }
+  }
+  .picto {
+    font-size: 40px;
+    line-height: 35px;
+  }
+  .picture {
+    height: 35px;
+  }
+  .parameters {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 15px;
+    .procedure {
+      width: 100%;
+      max-width: 364px;
+      line-height: 11px;
+      h2 {
+        font-weight: 900;
+      }
+    }
+    .parameter-type {
+      display: inline-table;
+      width: 50%;
+      .title {
+        border-bottom: 1px solid #e5e5e5;
+      }
+      .parameter-element {
+        display: flex;
+        margin-top: 7px;
+        .control-group .controls {
+          margin-left: 0px;
+          max-width: 100%;
+        }
+        .picto {
+          font-size: 55px;
+          line-height: 53px;
+        }
+        .picture {
+          height: 54px;
+        }
+      }
+    }
+  }
+  .inputs-outputs {
+    display: block;
+    .parameter-type {
+      width: 100%;
+      .input-part, .output-part {
+        display: flex;
+        .intervention_input_product {
+          min-width: 43%;
+        }
+        .intervention_quantity_quantity {
+          width: 10%;
+          input {
+            max-width: 72% !important;
+          }
+        }
+        .intervention_quantity_unit {
+          width: 15%;
+          input {
+            max-width: 72% !important;
+          }
+        }
+      }
+      .procedure {
+        max-width: none;
+      }
+    }
+  }
+}
+
+.taskboard .taskboard-column .taskboard-header .actions .duplicate-intervention {
+  font-size: 17px;
+}
+
+.open-modal, .week-proposal {
+  cursor: pointer;
+}
+
+
+.schedulings-calendar, #interventions {
+  .periods {
+    .period  {
+      opacity: 0.6;
+    }
+    .markers .interventions {
+      .yellow {
+        background-color: #eacf0d;
+      }
+      .green {
+        background-color: #05b905;
+      }
+      .orange {
+        background-color: #f36a0a;
+      }
+      .marker .picto {
+        color: white;
+        filter: alpha(opacity=60)
+      }
+    }
+  }
+}

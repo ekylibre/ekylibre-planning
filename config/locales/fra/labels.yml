@@ -1,0 +1,94 @@
+fra:
+  labels:
+    add_plot: Ajouter une parcelle
+    plot: Parcelle
+    human_area: Surface
+    human_area_in_hectare: Surface(ha)
+    add_scenario_activity: Ajouter une activité
+    duplicate_technical_itinerary: Dupliquer l'itinéraire cultural sélectionné
+    duplicate_on_campaign: Dupliquer sur la campagne
+    duplicate_selected_intervention_models: Dupliquer les modèles d'interventions sélectionnés
+    add_intervention_template: "Enregistrer un modèle d'intervention"
+    intervention_templates_was_duplicated: Les modèles d'interventions ont été dupliqués
+    select_the_intervention_model_to_duplicate: Sélectionnez les modèles d'interventions à dupliquer
+    add_technical_itinerary: "Enregistrer un itinéraire cultural"
+    add_scenario: "Enregistrer un nouveau scénario"
+    delete_parcel: "Supprimer Parcelle"
+    delete_activity: "Supprimer l'activité"
+    models: "Modèles" #?
+    every_intervention_template_are_already_duplicated: "Tous les modèles d'interventions ont déjà été dupliqués.<br/> <strong>Rappel :</strong> un modèle d’intervention ne peut être dupliqué qu’une seule fois."
+    prevision: Prévision
+    activity_singular: Activité
+    back_to_scenario: Revenir au scénario
+    nomenclature: "Nomenclatures" #?
+    planning: "Planification"
+    preparation_time: "Préparation" #?
+    workflow: "Débit de chantier" #?
+    day_between_intervention: "Délai apres l'intervention précédente"
+    new_intervention_template: "Nouveau modèle d'intervention"
+    compared_to_planting: 'Par rapport au semis (jours) :'
+    itinerary_templates: "Liste des interventions"
+    distribution: Répartition
+    do_not_divide: Ne pas répartir l'intervention de récolte
+    time_harvesting_repartition: Répartition de l'intervention de recolte
+    total_area_rotation: Surface totale assolée
+    repete: Répéter
+    repete_model: Répéter le modèle d'intervention
+    interval_simple: Intervalle
+    intervention_distributed_on: Intervention répartie sur
+    repartition_of_harvesting_intervention: "Répartir l'intervention de récolte sur :"
+    rotation_area: Surface assolée
+    ressource: Ressource
+    intervention_parameter: Paramètre d’intervention
+    type_of_model: Type de modèle
+    export_as_odf: Plan de charges en ODF
+    export__charge_plan_as_csv: Plan de charges en CSV
+    export_as_excel_csv: Plan de charges en CSV Excel
+    time_per_hectare: Temps passé par hectare
+    intervention_type: Type d'intervention
+    type_of_resource: Type/Variante ressource
+    quantity_necessary: Quantité nécessaire
+    available_quantity: Quantité disponible
+    average_yield: Rendement moyen
+    global_workload: Durée de travail globale
+    tools_workload: Charge de travail équipements
+    doers_workload: Charge de travail main d'oeuvre
+    service_workload: Charge de travail prestation de service
+    tools_cost: Coût équipements
+    doers_cost: Coût main d’œuvre
+    day_compare_to_planting: Nombre de jours par rapport au semis
+    delays: Délais
+    global_cost: Coût global
+    tool: Équipements
+    doer: Main d’oeuvre
+    input: Intrant
+    output: Extrant
+    hours_hectare: 'h/ha'
+    hectare_hours: 'ha/h'
+    batch_planting: Implantation des cultures par lot
+    predicated_sowing_date: Date prévisionnelle de semis/plantation
+    batches: Lots
+    batch: Lot
+    number_quantity: Nombre
+    batches_repartition: Implantation des cultures par lot
+    load_plans: "Plan de charges"
+    load_plans_of_scenario: Plan de charges du scénario
+    add_irregular_batch: Ajouter un lot
+    remove_irregular_batch: Supprimer le lot
+    advanced_mode: Mode avancé
+    week_details_from: Détail des charges de la semaine du
+    day_detail_of: Détail des charges journalières du
+    from: Du
+    second_harvesting_template_error: "Vous ne pouvez pas ajouter deux interventions identiques de type récolte"
+    second_planting_template_error: "Vous ne pouvez ajouter qu'une seule intervention de type implantation des cultures"
+    estimated_working_time: Durée de travail estimée
+    estimated_cost: Coût estimé
+    outputs: Extrants
+    more_details: Plus de détails
+    plan: Planifier
+    hide_intervention_proposal: Masquer les propositions d’intervention
+    crop: Assolement
+    visualisation: Visualiser
+    warning_this_models_x_are_already_duplicated_html: "Attention, le(s) modèle(s) d’intervention(s), <strong>%{models}</strong>, ont déjà été dupliqués sur une autre campagne. <br/> <strong>Rappel :</strong> un modèle d’intervention ne peut être dupliqué qu’une seule fois."
+    interventions_cant_be_modified_as_itk_is_already_used: "La liste des interventions ne peut plus être modifiée car l'itinéraire cultural a déjà été utilisé sur une ou plusieurs productions."
+

@@ -1,0 +1,23 @@
+- picto = 'tractor' if type == :tools
+- picto = 'male' if type == :doers
+- picto ||= 'input'
+
+- title = :workforce.tl if type == :doers
+- title = :equipments.tl if type == :tools
+- title ||= type.tl
+
+
+%div.details-block{ class: "#{type}" }
+  .details-header
+    .picture
+      %div.picto{ class: "picto-#{picto}"}
+    .title-block
+      %h3.title= title
+  .details-table
+    %table
+      %thead
+        %th.name-column= :name.tl
+        %th.type-column= type == :inputs ? :variant.tl : :nature.tl
+        %th.workload-column= type == :inputs ? :needed_quantity.tl : :workload.tl
+        %th.quantity-column= :quantity_available.tl
+      %tbody

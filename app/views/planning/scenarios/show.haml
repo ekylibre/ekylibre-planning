@@ -1,0 +1,30 @@
+.scenario-show
+  - main_toolbar do |t|
+    = t.edit resource
+    = t.destroy
+    = link_to 'Visualiser', planning_scenario_chart_path(resource), class: 'btn', data: { no_turbolink: true }
+    = dropdown_menu_button(:export.ta, icon: :download) do |d|
+      - d.item :export_as_odf.tl, params: params.merge(format: :ods)
+      - d.item :export__charge_plan_as_csv.tl, params: params.merge(format: :csv)
+      - d.item :export_as_excel_csv.tl, params: params.merge(format: :xcsv)
+
+  = main_informations do
+    = attributes_list do |l|
+      - l.attribute :name
+      - l.attribute :description
+
+  = cobbles do |c|
+    - c.cobble(:general_informations) do
+      .big-infos
+        .big-info
+          .title= :total_area_rotation.tl
+          .value
+            %i.picto.picto-land-parcels
+            = resource.decorate.total_area.in(:hectare).l(precision: 2)
+      .info
+        %span.title= :activities.tl
+        %span.value
+          = resource.decorate.activities_with_area
+
+    - c.cobble(:rotation) do
+      = cobble_list :rotations

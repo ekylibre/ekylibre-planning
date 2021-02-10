@@ -1,0 +1,24 @@
+fra:
+  activerecord:
+    errors:
+      models:
+        planning/activity_production_ext/irregular_batch:
+          attributes:
+            estimated_sowing_date:
+              date_should_be_after_start_date_of_production: La date doit être postérieure à la date de début de production
+              date_should_be_before_end_of_production: La date doit être antérieure à la date de fin de production
+        activity_production:
+          attributes:
+            predicated_sowing_date:
+              date_should_be_after_start_date_of_production: La date doit être postérieure à la date de début de production
+              date_should_be_before_end_of_production: La date doit être antérieure à la date de fin de production
+        intervention_template:
+          attributes:
+            base:
+              cannot_be_destroy: Vous ne pouvez pas supprimer ce model d'intervention
+            campaign:
+              change_not_allowed: Modification interdite
+        planning/intervention_template:
+          attributes:
+            originator:
+              already_have_linked_intervention_template: Ce model d'intervention à déjà été dupliqué

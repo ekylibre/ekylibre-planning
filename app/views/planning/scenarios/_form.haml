@@ -1,0 +1,8 @@
+= field_set do
+  = f.referenced_association :campaign, new: false, source: { controller: '/backend/campaigns' }, disabled: f.object.scenario_activities.present?
+  = f.input :name
+  = f.input :description, as: :text
+
+#crop
+  = field_set :crop.tl do
+    = f.nested_association(:scenario_activities, partial: '/planning/scenarios/activity_fields')

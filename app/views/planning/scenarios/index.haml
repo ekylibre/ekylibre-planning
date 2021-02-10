@@ -1,0 +1,8 @@
+- main_period_selector(:year)
+
+- main_toolbar do |t|
+  = tool_to(:add_scenario.tl, { controller: :scenarios, action: :new }, icon: :plus)
+
+= kujaku do |k|
+  - k.text
+= main_list

@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<navigation>
+  <part name="planning" after-part="production">
+    <page to="planning/dashboards#planning"/>
+    <group name="parameters">
+      <item name="intervention_templates">
+        <page to="planning/intervention_templates#index" nonexistent="true"/>
+        <page to="planning/intervention_templates#create" nonexistent="true"/>
+        <page to="planning/intervention_templates#select_type" nonexistent="true"/>
+        <page to="planning/intervention_templates#new" nonexistent="true"/>
+        <page to="planning/intervention_templates#edit" nonexistent="true"/>
+        <page to="planning/intervention_templates#show" nonexistent="true"/>
+        <page to="planning/intervention_templates#duplicate" nonexistent="true"/>
+      </item>
+      <item name="technical_itineraries">
+        <page to="planning/technical_itineraries#index" nonexistent="true"/>
+        <page to="planning/technical_itineraries#create" nonexistent="true"/>
+        <page to="planning/technical_itineraries#select_type" nonexistent="true"/>
+        <page to="planning/technical_itineraries#new" nonexistent="true"/>
+        <page to="planning/technical_itineraries#edit" nonexistent="true"/>
+        <page to="planning/technical_itineraries#show" nonexistent="true"/>
+      </item>
+    </group>
+    <group name="prevision" icon="bar-chart">
+      <item name="scenarios">
+        <page to="planning/scenarios#index" nonexistent="true"/>
+        <page to="planning/scenarios#new" nonexistent="true"/>
+        <page to="planning/scenarios#create" nonexistent="true"/>
+        <page to="planning/scenarios#edit" nonexistent="true"/>
+        <page to="planning/scenarios#show" nonexistent="true"/>
+        <page to="planning/scenarios#chart" nonexistent="true"/>
+      </item>
+      <item name="load_plans">
+        <page to="planning/load_plans#index" nonexistent="true"/>
+      </item>
+    </group>
+    <group name="planning" icon="calendar">
+      <item name="scheduling">
+        <page to="planning/schedulings#index" nonexistent="true"/>
+        <page to="planning/schedulings#new_detailed_intervention" nonexistent="true"/>
+      </item>
+    </group>
+  </part>
+</navigation>

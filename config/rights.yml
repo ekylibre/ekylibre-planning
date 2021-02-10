@@ -1,0 +1,93 @@
+intervention_templates:
+  read:
+    actions:
+    - "planning/intervention_templates#index"
+    - "planning/intervention_templates#show"
+    - "planning/intervention_templates#list"
+    - "planning/intervention_templates#templates_of_activity"
+    - "planning/intervention_templates#interventions_have_activities"
+    - "backend/campaigns#show"
+  write:
+    dependencies:
+      - read-intervention_templates
+    actions:
+    - "planning/intervention_templates#create"
+    - "planning/intervention_templates#destroy"
+    - "planning/intervention_templates#select_type"
+    - "planning/intervention_templates#edit"
+    - "planning/intervention_templates#new"
+    - "planning/intervention_templates#update"
+    - "backend/campaigns#show"
+
+load_plans:
+  read:
+    actions:
+      - "planning/load_plans#index"
+      - "planning/load_plans#period_charges_details"
+      - "planning/load_plans#period_charges"
+  write:
+    dependencies:
+      - read-load_plans
+
+technical_itineraries:
+  read:
+    actions:
+      - "planning/technical_itineraries#list_intervention_templates"
+      - "planning/technical_itineraries#list_activity_productions"
+      - "planning/technical_itineraries#list"
+      - "planning/technical_itineraries#unroll"
+      - "planning/technical_itineraries#index"
+      - "planning/technical_itineraries#show"
+      - "backend/campaigns#show"
+  write:
+    dependencies:
+      - read-technical_itineraries
+    actions:
+      - "planning/technical_itineraries#duplicate_intervention"
+      - "planning/technical_itineraries#create"
+      - "planning/technical_itineraries#edit"
+      - "planning/technical_itineraries#new"
+      - "planning/technical_itineraries#update"
+      - "planning/technical_itineraries#destroy"
+      - "backend/campaigns#unroll"
+      - "backend/campaigns#show"
+      - "backend/activities#unroll"
+      - "planning/intervention_templates#templates_of_activity"
+      - "planning/intervention_templates#interventions_have_activities"
+
+schedulings:
+  read:
+    actions:
+      - "planning/schedulings#available_time_or_quantity"
+      - "planning/schedulings#change_week_preference"
+      - "planning/schedulings#intervention_chronologies"
+      - "planning/schedulings#new_intervention"
+      - "planning/schedulings#update_model_time"
+      - "planning/schedulings#weekly_daily_charges"
+      - "planning/schedulings#index"
+      - "planning/schedulings#show"
+      - "backend/products#unroll"
+  write:
+    dependencies:
+      - read-schedulings
+    actions:
+      - "planning/schedulings#new_detailed_intervention"
+      - "planning/schedulings#new_intervention"
+      - "planning/schedulings#update_proposal"
+      - "planning/schedulings#create_intervention"
+      - "planning/schedulings#update_estimated_date"
+      - "planning/schedulings#update_intervention_dates"
+      - "planning/schedulings#create"
+      - "planning/schedulings#new"
+      - "planning/schedulings#edit"
+      - "planning/schedulings#update"
+      - "planning/schedulings#destroy"
+      - "backend/products#unroll"
+      - "backend/interventions#new"
+      - "backend/interventions#create"
+      - "backend/interventions#update"
+      - "backend/interventions#compute"
+      - "backend/interventions#modal"
+      - "backend/interventions#show"
+      - "backend/interventions#edit"
+      - "backend/interventions#change_state"

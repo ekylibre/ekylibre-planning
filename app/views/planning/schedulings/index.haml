@@ -1,0 +1,86 @@
+= content_for :no_turbolink, true
+
+- main_toolbar
+
+
+.schedulings-calendar
+  .schedulings-calendar-filters
+    .week-selectors
+      - button_disabled = false
+      - button_disabled = true unless can_edit?(params)
+      = link_to(:add_intervention_request.tl, new_backend_intervention_path(nature: :request), disabled: button_disabled, class: 'btn')
+
+      .selectors-btn
+        .selector.btn-group
+          %button.btn{ 'v-on:click': 'today' }= :today.tl
+        .selector.btn-group
+          %button.btn.btn-previous.icn.icn-only{'v-on:click': 'previousWeek'}
+          %button.btn
+            {{ week }}
+          %button.btn.btn-next.icn.icn-only{'v-on:click': 'nextWeek'}
+    .hide-intervention-proposal
+      %input{ type: :checkbox, 'v-model': 'showInterventionProposal', id: 'hide-show-proposal' }
+      %label{ for: 'hide-show-proposal' }= :hide_intervention_proposal.tl
+
+    .kujaku
+      .feathers
+        .feather
+          .feather-text
+            %label= :land_parcel_name.tl
+            = select_tag(:land_parcel_id, options_for_select([[]] + accented_sort(@land_parcels.pluck(:name, :id)), @selected_land_parcel), 'v-on:change': 'filter')
+          .feather-text
+            %label= :worker.tl
+            = select_tag(:worker_id, options_for_select([[]] + accented_sort(@workers.pluck(:name, :id)), @selected_worker_id), 'v-on:change': 'filter')
+          .feather-text
+            %label= :equipment.tl
+            = select_tag(:equipment_id, options_for_select([[]] + accented_sort(@equipments.pluck(:name, :id)), @selected_equipment_id), 'v-on:change': 'filter')
+
+          .details
+            %i.picto.picto-plus-square-o{ 'v-show': "!show_details", 'v-on:click': 'show_details = true' }
+            %i.picto.picto-minus-square-o{ 'v-show': 'show_details', 'v-on:click': 'show_details = false' }
+
+        .feather.feather-list{ 'v-show': 'show_details' }
+          .feather-block
+            .label-container= Activity.model_name.human
+            .value-container
+              = select_tag(:activity_id, options_for_select([[]] + @activities.pluck(:name, :id).sort, @selected_activity_id), 'v-on:change': 'filter')
+
+        .feather.feather-list{ 'v-show': 'show_details' }
+          .feather-block
+            .label-container= Intervention.human_attribute_name(:reference_name)
+            .value-container
+              = select_tag(:procedure_name, options_for_select([[]] + @procedures.collect{|p| [p.human_name, p.name.to_s]}.sort_by(&:first), @selected_procedure_name), 'v-on:change': 'filter')
+
+  .schedulings-chronology
+  .schedulings-calendar-columns
+    .day-columns
+      .day-column{ 'v-for': 'week_day in week_days', ':index': 'week_day.index', ':day': 'week_day.day', ':formatted_day': 'week_day.formatted_day' }
+        .column-header
+          %span.column-label {{ week_day.day }}
+
+
+    - disable_draggable = "false"
+    - unless can_edit?(params)
+      - disable_draggable = "true"
+
+    .datas-columns{'v-bind:class': "{ 'columns-empty': all_columns_empty == true }"}
+      = content_tag(:draggable,
+                    class: 'datas-column',
+                    'v-for': '(day_datas, index) in interventions',
+                    ':key': 'index',
+                    ':day-index': 'index',
+                    ':model': 'day_datas',
+                    '@end': 'moveItem',
+                    '@start': 'startMoveItem',
+                    ':options': "{group: {name: 'dragGroup', put: true, pull: true}, forceFallback: true, fallbackOnBody: true, disabled: #{ disable_draggable }}") do
+        .intervention{ 'v-for': 'intervention in day_datas', 'v-if': 'showIntervention(intervention.type)', 'v-bind:class': "{ 'proposed-intervention': intervention.type == 'proposal', 'planned-intervention': intervention.type == 'planned'}", ':key': 'intervention.id', ':intervention-id': 'intervention.id', '@click': 'initializeModal(intervention, $event)', data: { can_open_modal: "true" }}
+          %span.intervention-name {{ intervention.name }}
+          .intervention-datas
+            .intervention-data{ 'v-for': 'parcel in intervention.land_parcels', ':style': "{ 'background-color': parcel.color }" }
+              %i.picto.picto-land-parcels{ ':style': "{ 'color': parcel.text_color }"}
+              %span.land-parcel-name{ ':style': "{ 'color': parcel.text_color }"} {{ parcel.name }}
+
+
+  = modal(id:'create-intervention-modal', class: "interventions-modal", size: :large) do
+    .modal-body
+    .modal-footer

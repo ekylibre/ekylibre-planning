@@ -1,0 +1,12 @@
+.planning-activities
+  = field_set do
+    = f.referenced_association :activity,
+    new: false,
+    source: { controller: 'backend/activities',
+      scope: { of_campaign: @scenario.campaign_id }},
+      disabled: f.object.plots.present?
+    = link_to_remove_association(f, { wrapper_class: :activities }) do
+      %i.picto{ class: 'picto-remove' }
+    .text-center.nested-plots{ hidden: true }
+      =  f.nested_association(:plots, partial: '/planning/scenarios/plot_fields', locals: { scenario_activity: f.object })
+      -# = link_to_add_association("labels.add_plot".t, f, :plots, 'data-no-turbolink' => true,)

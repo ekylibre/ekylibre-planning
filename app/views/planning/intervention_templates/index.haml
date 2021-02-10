@@ -1,0 +1,10 @@
+- main_toolbar do |t|
+  = tool_to(:add_intervention_template.tl, { controller: :intervention_templates, action: :select_type }, icon: :plus)
+- main_period_selector(:year)
+
+= kujaku do |k|
+  - k.text
+  - k.list :procedure_name, label: :type_of_model.tl, list_values: ::InterventionTemplate.used_procedures.collect{ |p| [p.human_name, p.name.to_s]}.sort_by(&:first)
+  - k.list :activity, value_label: :name
+
+= main_list

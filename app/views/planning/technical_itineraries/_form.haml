@@ -1,0 +1,114 @@
+= content_tag(:div,
+  id: :technical_itinerary_form,
+  data: { itinerary: @technical_itinerary.to_json,
+  itinerary_templates_attributes: itinerary_templates_list,
+  is_linked_to_production: @technical_itinerary.activity_productions.any? }) do
+
+  .form-errors.flash.error{ 'v-if': '(errors.length != 0)' }
+    %a{ 'href': '#', class: "close", 'v-on:click': 'errors = []'}= 'x'
+    %ul{ class: 'errors-messages' }
+      %li{ 'v-for': 'error in errors' }
+        {{ error }}
+
+
+  = field_set do
+    #vue-js-form
+      %list-input{ label: :campaign.tl,
+      url: unroll_backend_campaigns_path,
+      ':require': 'true',
+      'v-model': 'itinerary.campaign_id',
+      value_label: @technical_itinerary.campaign.name,
+      disable: (@technical_itinerary.id != nil || @technical_itinerary.originator.present?) }
+      = f.input :name, input_html: { 'v-model': 'itinerary.name' }, required: true
+      -# Vuejs component can be find in app/assets/javascripts/form/list_input
+      %list-input{ label: :activity_singular.tl,
+      url: '/backend/activities/unroll',
+      'v-model': 'itinerary.activity_id',
+      ':require': 'true',
+      value_label: @technical_itinerary.activity&.name,
+      ':disable': 'activityIsDisabled' }
+      = f.input :description, as: :text,  input_html: { 'v-model': 'itinerary.description' }
+
+  = field_set :itinerary_templates do
+    .flash.warning{ 'v-if': 'isLinkedToProduction()' }= :interventions_cant_be_modified_as_itk_is_already_used.tl
+
+    = simple_fields_for(f.object.itinerary_templates.new) do |p|
+      = content_tag(:draggable,
+      ':list': 'orderedTemplates()',
+      ':onChoose': 'dragedItem',
+      ':component-data': "getComponentData()",
+      ':move': 'checkMove') do
+        .templates-association{ 'v-for': '(template, index) in orderedTemplates()',
+        'v-if': 'template._destroy == null',
+        ':key': 'template.aid',
+        ':position': 'template.position',
+        'v-bind:class': "{'draggable': !template.is_duplicate}", ':duplicate-template': "template.is_duplicate" }
+          = p.input :day_between_intervention,
+          label: false,
+          wrapper: :top_hint,
+          wrapper_html: { 'v-bind:class': '{invisible: index == 0}' } do
+            = p.input_field :day_between_intervention,
+            'v-model': 'template.day_between_intervention',
+            'v-on:change': 'updatePlantationDelay',
+            ':disabled': 'template.parent_hash != null || isLinkedToProduction()',
+            'v-bind:class': '{has_success: template.toUpdate}',
+            ':max': 'template.maxValue',
+            min: 0
+            %span.add-on= :days.tl
+            %button.btn.btn-sucess{ 'v-if': 'template.toUpdate', '@click.prevent': 'validTemplateUpdate(template)' }
+              %i.picto{ class: 'picto-check'}
+          .template-part
+            {{ template.intervention_template_name }}
+            %p
+              = :compared_to_planting.tl
+              {{ template.plantingDelay }}
+            %p{ 'v-if': 'template.is_harvesting && !template.dont_divide_duration' }
+              = :intervention_distributed_on.tl
+              {{ template.duration }}
+              = :days.tl
+          %recurring-intervention{ close: :close.tl,
+          validate: :validate.tl,
+          repete_model: :repete_model.tl,
+          repete: :repete.tl,
+          interval: :interval_simple.tl,
+          ':template': 'template',
+          'v-on:updated': 'duplicateTemplate',
+          ':ref': "'recurring_' + template.aid",
+          'v-if': '!isLinkedToProduction()' }
+          %a.edit-association{ href: '#', '@click': 'editTiming(template)', 'v-if': 'template.is_harvesting && !isLinkedToProduction()' }
+            %i.picto{ class: 'picto-mode-edit'}
+
+          %a.remove-association{ href:'#', '@click': 'removeParentTemplate(template.position)', 'v-if': 'template.parent_hash == null && !isLinkedToProduction()' }
+            %i.picto{ class: 'picto-remove' }
+
+      .new-template{ 'v-if': '!isLinkedToProduction()' }
+        = p.input :day_between_intervention,
+        label: false,
+        wrapper: :top_hint,
+        hint: :day_between_intervention.tl,
+        wrapper_html: { 'v-show': 'itinerary.itinerary_templates_attributes.length > 0' } do
+          = p.input_field :day_between_intervention, class: 'day-between', 'v-model': 'new_template.day_between_intervention', min: 0
+          %span.add-on= :days.tl
+
+        %list-input{ label: '',
+        top_hint: :new_intervention_template.tl,
+        url: templates_of_activity_planning_intervention_templates_path,
+        'v-model': 'new_template.intervention_template_id',
+        ':value_label': 'new_template.intervention_template_name',
+        ':options' => '{activity_id: itinerary.activity_id, campaign_id: itinerary.campaign_id}',
+        ':key': 'new_template.aid',
+        ':aid': 'new_template.aid',
+        'v-on:updated': 'updateItem' }
+
+        = render('planning/technical_itineraries/duration', p: p)
+
+        %a.add-association{ href: '#', '@click': "addTemplate($event)", data: { second_harvesting_template_error: :second_harvesting_template_error.tl, second_planting_template_error: :second_planting_template_error.tl }}
+          = :add.tl
+
+  - f.clear_actions!
+  - f.add do
+    %button.btn.primary{ 'v-on:click.prevent': 'saveItineraty' }
+      = :submit.tl
+
+- if !params[:modal_computed] && (@unduplicate_intervention_templates.present? || @unvalid_duplicate_intervention_templates.present?)
+  = render('duplication_modal')

@@ -1,0 +1,41 @@
+.intervention_template-show
+  -main_toolbar do |t|
+    = t.edit resource
+    = t.duplicate if resource.is_duplicatable?
+    = t.destroy
+
+  = main_informations do
+    = attributes_list do |l|
+      - l.attribute :name
+      - l.attribute :active
+
+  = cobbles do |c|
+    - c.cobble(:general_informations) do
+      .big-infos
+        .big-info
+          %span.title= :preparation_time.tl
+          %span.value
+            %i.picto.picto-doer
+            = resource.preparation_time
+        .big-info
+          %span.title= :workflow.tl
+          %span.value
+            %i.picto.picto-tool
+            = "#{resource.workflow.l(precision: 1)} #{:hectare_hours.tl}"
+
+        .big-info
+          %span.title= :time_per_hectare.tl
+          %span.value
+            %i.picto.picto-tool
+            = resource.human_time_per_hectare
+
+      .info
+        %span.title= :activity.tl
+        %span.value= resource.list_of_activities
+
+    - c.cobble(:parameters) do
+      %ul.product_parameters= render partial: 'product_parameter', collection: resource.product_parameters
+
+    - c.cobble(:technical_itineraries) do
+      = link_to(:new.tl, new_planning_technical_itinerary_path, class: 'btn btn-default icn btn-new')
+      = cobble_list :technical_itineraries

@@ -1,0 +1,23 @@
+= modal(id: 'duplicate_intervention_templates', size: :large) do
+  - if @valid_intervention_templates.empty?
+    .modal-body.flash.error
+      = :every_intervention_template_are_already_duplicated.tl.html_safe
+    .modal-footer
+      = button_tag(:cancel.tl, class: 'btn btn-default', data: { dismiss: 'modal' })
+  - else
+    = form_tag(duplicate_intervention_templates_planning_intervention_template_path(@valid_intervention_templates), method: :post) do
+      .modal-header
+        %h4.modal-title= :duplicate_selected_intervention_models.tl
+      .modal-body
+        - if @unvalid_intervention_templates.any?
+          .unvalid.flash.warning
+            = :warning_this_models_x_are_already_duplicated_html.tl(models: @unvalid_intervention_templates.map(&:name).to_sentence).html_safe
+
+        = label_tag(:duplicate_on_campaign.tl)
+        = select_tag(:campaign, options_from_collection_for_select(current_campaign.followings, :id, :name))
+
+      .modal-footer
+        = button_tag(:cancel.tl, class: 'btn btn-default', data: { dismiss: 'modal' })
+        = submit_tag(:validate.tl, class: 'btn primary')
+
+= yield(:popover)

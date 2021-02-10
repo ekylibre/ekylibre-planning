@@ -1,0 +1,35 @@
+fra:
+  rest:
+    actions:
+      duplication_list: Dupliquer
+  actions:
+    planning/dashboards:
+      planning: "Tableau de bord de la planification"
+    planning/intervention_templates:
+      edit: "Modifier modèle d'intervention de %{procedure_name} - Campagne %{campaign_name}" #?
+      index: "Modèles d'interventions"
+      new: "Nouveau modèle d'intervention de %{procedure_name}" #?
+      select_type: "Modèles d'interventions" #?
+      show: "%{name} - Campagne %{campaign_name}"
+      duplicate: "Nouveau modèle d'intervention de %{procedure_name}"
+    planning/technical_itineraries:
+      edit: "Modifier l'itinéraire cultural %{technical_itinerary} - Campagne %{campaign_name}"
+      index: "Itinéraires culturaux"
+      new: "Nouvel itinéraire cultural"
+      show: "%{name} - Campagne %{campaign_name}"
+    planning/load_plans:
+      index: "Plan de charges"
+    planning/schedulings:
+      index: "Ordonnancement"
+      edit_specified_request: "Nouvelle planification de %{procedure_name}"
+    planning/scenarios:
+      index: "Scénarios"
+      new: "Nouveau scénario"
+      show: "%{name} - Campagne %{campaign_name}"
+      edit: "Modifier le scénario : %{scenario_name}"
+      chart: "Plan de charges du scénario %{scenario_name}"
+  labels:
+    add_intervention_template: "Ajouter un modèle d'intervention"
+    rotation: 'Assolement'
+  unrolls:
+    planning/backend/products: "%{work_number} %{name} (%{number}) - %{container_name}"

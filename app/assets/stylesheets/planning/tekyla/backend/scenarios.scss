@@ -1,0 +1,131 @@
+.plot {
+  display: flex;
+  justify-content: space-around;
+  padding-left: 25px;
+  .remove_fields, h3 {
+    margin-top: 40px;
+  }
+  .technical-itinerary .selector input {
+    width: 220px;
+  }
+  .batch-planting-part .batch-planting.control-group .controls {
+    display: block ;
+  }
+  label {
+    display: block
+  }
+  .control-group {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    .controls {
+      display: flex;
+      flex-direction: column;
+      margin-left: 0% !important;
+      .date {
+        width: 255px;
+      }
+      .items-list {
+        text-align: left;
+      }
+      .help-block {
+        display: inline-block;
+        padding-left: 5px;
+      }
+    }
+    .control-label {
+      max-width: none;
+    }
+  }
+  #batches_repartition .control-group .controls {
+    margin-left: 35% !important;
+  }
+  .date-part {
+    .control-group label.date {
+      margin-left: 0px;
+    }
+    .batch-planting-part {
+      display: flex;
+      i {
+        font-size: 22px;
+        min-width: 5px;
+        line-height: 40px;
+        color: inherit;
+        cursor: pointer;
+      }
+      label {
+        margin-left: 0px;
+      }
+    }
+  }
+  .technical-itinerary {
+    .controls {
+      max-width: none;
+    }
+  }
+}
+#plots-field {
+  .links {
+    text-align: left;
+    background: white;
+    .add_fields {
+      margin-left: 20px !important;
+      width: 120px
+    }
+
+  }
+}
+
+.nested-plots {
+  .add_fields {
+    display: block;
+    text-align: left;
+  }
+}
+
+
+#crop {
+  .edit_batch_planting {
+    color: rgb(63, 112, 206);
+  }
+  .scenario_scenario_activities_activity {
+    display: inline-block;
+    width: 40%;
+    .control-label {
+      max-width: none !important;
+    }
+    .controls {
+      margin-left: 70%
+    }
+  }
+  .picto-remove {
+    font-size: 16px
+  }
+  .fieldset-fields {
+    .nested-scenario_activities {
+      .links {
+        .nested-add {
+          margin-left: 45%;
+        }
+        .disabled {
+          pointer-events: none;
+          cursor: not-allowed;
+          color: grey;
+        }
+      }
+    }
+  }
+}
+
+.main-page-actions {
+  margin-left: 15px;
+  padding: 10px;
+  .btn-group {
+    margin-right: 10px
+  }
+}
+
+/*
+  Place all the styles related to the matching controller here.
+  They will automatically be included in application.css.
+*/

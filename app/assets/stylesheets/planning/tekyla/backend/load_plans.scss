@@ -1,0 +1,85 @@
+.plan-charge .main-page-header {
+  @include flex-row(space-between, center);
+  padding: 0;
+  padding-right: 1em;
+  margin: 0;
+  height: 63px;
+  border-bottom: 1px solid #DDD;
+
+  .title {
+    padding: 7px 14px;
+    white-space: nowrap;
+    overflow: hidden;
+    -webkit-text-overflow: ellipsis;
+    -khtml-text-overflow: ellipsis;
+    -moz-text-overflow: ellipsis;
+    -ms-text-overflow: ellipsis;
+    -o-text-overflow: ellipsis;
+    text-overflow: ellipsis;
+    font-weight: normal;
+    line-height: 50px;
+    height: 50px;
+    font-size: 30px;
+    vertical-align: middle;
+  }
+
+  .plan-charge-filters {
+    .reload-all-activities {
+      font-size: $fs-huge * 0.9;
+      line-height: 22px;
+    }
+
+    ul.dropdown-menu.activity-selector {
+      right: 0 !important;
+      left: auto !important;
+    }
+
+    .activity-selector .activity-name {
+      padding-left: 0.5em;
+    }
+  }
+}
+
+.plan-charge .plan-charge-chart {
+  .bar-chart {
+    padding-left: 1em;
+  }
+}
+
+.plan-charge .plan-charge-details .cobble-content {
+  @include flex-column(flex-start);
+  padding: 2em;
+
+  .details-block {
+    width: 100%;
+    margin-bottom: 3em;
+  }
+
+  .details-header {
+    @include flex-row(flex-start);
+    margin-bottom: 1em;
+
+    .title {
+      font-size: $fs-large;
+      font-weight: bold;
+    }
+  }
+
+  .details-table {
+    .name-column {
+      width: 20%;
+    }
+
+    .type-column {
+      width: 30%;
+    }
+
+    .workload-column {
+      width: 25%;
+    }
+
+    .quantity-column {
+      width: 25%;
+    }
+  }
+}

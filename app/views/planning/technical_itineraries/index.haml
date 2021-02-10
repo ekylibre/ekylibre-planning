@@ -1,0 +1,10 @@
+- main_period_selector(:year)
+
+- main_toolbar do |t|
+  = tool_to(:add_technical_itinerary.tl, { controller: :technical_itineraries, action: :new }, icon: :plus)
+
+= kujaku do |k|
+  - k.text
+  - k.list :activity, value_label: :name
+
+= main_list

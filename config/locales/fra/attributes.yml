@@ -1,0 +1,18 @@
+fra:
+  attributes:
+    list_of_activities: Nom des activités
+    preparation_time: Temps de préparation
+    average_yield: Rendement moyen
+    technical_itinerary: Itinéraire cultural
+    technical_itineraries: Itinéraires culturaux
+    intervention_templates_list: Liste des interventions
+    technical_itinerary_parameters: Paramètres de l'itinéraire cultural
+    predicated_sowing_date: Date prévisionnelle de semis/plantation
+    batch_planting: Implantation des cultures par lot
+    day_interval: "Semés/plantés tous les :"
+    estimated_sowing_date: "Date prévisionnelle de semis/plantation"
+    area: Surface
+    activity_productions_list: Productions
+  models:
+    intervention_template:
+      label: "%{name} - Campagne %{campaign}"

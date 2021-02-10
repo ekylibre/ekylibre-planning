@@ -1,0 +1,15 @@
+.activity-productions
+  .activity-production
+    .activity-production-chronology
+      .chronology
+        .grades
+          - @grades.each_with_index do |grade, index|
+            .grade{class: (grade.month == 1 ? 'grade-start' : 'grade-middle') + ' ' + ((index == 0 || grade.month == 1) ? 'grade-year' : 'grade-month')}= ((index == 0 || grade.month == 1) ? grade.year.to_s : I18n.t('date.abbr_month_names')[grade.month])
+        .periods
+          - url_options = { action: :show, controller: 'backend/activity_productions', id: @production.activity_production.id }
+          - html_options = {:title => @production.name}
+          = product_chronology_period(@period_started_on, @period_stopped_on, @period_started_on, @duration, @production.activity_production.color, url_options, html_options)
+          .markers
+            - unless @production.interventions.nil?
+              .interventions
+                = interventions_proposals_chronology_icons(@production.activity_production.interventions_and_proposals_by_weeks, @period_started_on, @duration, { class: "marker" })

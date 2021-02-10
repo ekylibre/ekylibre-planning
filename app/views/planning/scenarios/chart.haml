@@ -1,0 +1,47 @@
+= content_for :no_turbolink, true
+
+.plan-charge{ data: { id: @scenario.id }}
+  .plan-charge-chart
+    .main-page-header
+      %h1.title= "#{:load_plans_of_scenario.tl} #{@scenario.name}"
+      .plan-charge-filters
+        .btn-group.year-selector
+          %button.btn.btn-previous.icn.icn-only{'v-on:click': 'loadPreviousYear'}
+          = content_tag(:button, nil, { class: "btn" }) do
+            %span.year-selector-label {{ chartYearFilter }}
+          %button.btn.btn-next.icn.icn-only{'v-on:click': 'loadNextYear'}
+
+        .btn.btn-group
+          = content_tag(:button, nil, { class: "btn btn-with-intervals activity-dropdown",
+                                        data: { 'toggle': 'dropdown', 'original_label': :activities.tl }}) do
+            %span.activity-dropdown-label= :activities.tl
+            %span.caret
+          = content_tag(:ul, nil, class: "dropdown-menu interval-menu activity-selector") do
+            = content_tag(:li, nil, { class: 'activity-name', 'v-on:click': 'loadWithAllActivity' }) do
+              %span= :all_f.tl
+            - Activity.where(id: @scenario.scenario_activities.map(&:activity_id)).each do |activity|
+              = content_tag(:li, nil, { class: "activity-name", 'v-on:click': 'loadWithActivity' }) do
+                = hidden_field_tag 'activity_id', activity.id
+                %span= activity.name
+
+        .btn-group.hidden
+          %button.btn.picto.picto-publish.reload-all-activities{'v-on:click': 'unzoom'}
+    .main-page-actions
+      = dropdown_menu_button(:export.ta, icon: :download) do |d|
+        - d.item :export_as_odf.tl, params: params.merge(format: :ods)
+        - d.item :export__charge_plan_as_csv.tl, params: params.merge(format: :csv)
+        - d.item :export_as_excel_csv.tl, params: params.merge(format: :xcsv)
+      = link_to(:back_to_scenario.tl, planning_scenario_path(@scenario), class: 'btn btn-primary', data: { no_turbolink: true })
+    = content_tag('bar-chart', nil, { class: 'bar-chart',
+                     ':chart-data': "chartData",
+                     ':options': "chartOptions",
+                     ':width': '7000',
+                     ':height': '400'})
+
+
+  .plan-charge-details.hidden
+    = cobbles do |c|
+      - c.cobble(:plan_charge_details, title: "") do
+        = render partial: 'planning/load_plans/details', locals: { type: :tools }
+        = render partial: 'planning/load_plans/details', locals: { type: :doers }
+        = render partial: 'planning/load_plans/details', locals: { type: :inputs }

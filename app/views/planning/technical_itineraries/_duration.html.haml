@@ -1,0 +1,27 @@
+#duration-modal
+  %transition
+    .modal.modal-mask{ 'v-if': 'openModal' }
+      .modal-wrapper.modal-dialog
+        .modal-content
+          .modal-header
+            %h4.modal-title= :distribution.tl
+          .modal-body
+            .modal-form
+              .fieldset-legend
+                %i.picto.picto-book
+                = :time_harvesting_repartition.tl
+
+              = p.input :duration, label: :repartition_of_harvesting_intervention.tl do
+                = p.input_field :duration, 'v-model': 'modalValue.time', ':disabled': 'modalValue.dont_divide_duration', min: 0
+                %span.add-on= :days.tl
+              = p.input :dont_divide_duration,
+              label: :do_not_divide.tl,
+              input_html: { 'v-model': 'modalValue.dont_divide_duration' }
+          .modal-footer
+            %slot{:name => "footer"}
+            %button.close-modal.btn.btn-default{ '@click.prevent': 'openModal = false' }
+              = :close.tl
+            %button.validate-modal.btn.primary{ '@click.prevent': 'updateHarvestingTemplateDuration' }
+              = :validate.tl
+              -# = succeed "@click=\"$emit('close')\">" do
+              -#   %button.modal-default-button
