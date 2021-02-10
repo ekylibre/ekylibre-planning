@@ -6,12 +6,12 @@ This sub-project uses MIT-LICENSE. <br>
 
 Add the gem in your ekylibre gemfile :
 ```
-  gem 'ekylibre-planning', git: 'git@gitlab.com:ekylibre/ekylibre-planning.git'
+  gem 'planning', git: 'git@gitlab.com:ekylibre/ekylibre-planning.git'
   gem 'vuejs-rails'
 ```
 or in development mode, you can clone the repository in 'planning' folder near ekylibre and then add in your ekylibre gemfile :
 ```
-  gem 'ekylibre-planning', path: '../ekylibre-planning'
+  gem 'planning', path: '../ekylibre-planning'
   gem 'vuejs-rails'
 ```
 
