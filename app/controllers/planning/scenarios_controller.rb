@@ -3,10 +3,9 @@ module Planning
     # before_action :set_planning_scenario, only: [:show, :edit, :update, :destroy]
     manage_restfully except: [:show], model_name: Scenario.to_s
 
-
     def self.list_conditions
-      code =''
-      code = search_conditions('scenario': %i[name]) + " ||= []\n"
+      code = ''
+      code = "#{search_conditions('scenario': %i[name])} ||= []\n"
 
       code << "if current_campaign\n"
       code << "  c[0] << \" AND #{Scenario.table_name}.campaign_id = ?\"\n"
@@ -34,14 +33,13 @@ module Planning
                     .where(planning_scenario_activities: { planning_scenario_id: params[:id] })
                     .select(:id)'.c }
     ) do |t|
-        t.column :activity_name, through: :scenario_activity, label: :activities, url: { controller: 'backend/activities', id: 'RECORD.scenario_activity.activity_id'.c }
-        t.column :parcel_name, label: :plot
-        t.column :human_area, label: :human_area
-        t.column :technical_itinerary, url: true
-        t.column :batch_planting
-      end
-    
-
+      t.column :activity_name, through: :scenario_activity, label: :activities,
+                               url: { controller: 'backend/activities', id: 'RECORD.scenario_activity.activity_id'.c }
+      t.column :parcel_name, label: :plot
+      t.column :human_area, label: :human_area
+      t.column :technical_itinerary, url: true
+      t.column :batch_planting
+    end
 
     # # GET /planning/scenarios/new
     def new
@@ -68,7 +66,7 @@ module Planning
       find_scenario
       t3e(scenario_name: @scenario.name)
       params[:namespace] = :planning
-      render(locals: { cancel_url: :back})
+      render(locals: { cancel_url: :back })
     end
 
     def update
@@ -107,7 +105,7 @@ module Planning
       find_scenario
       t3e(scenario_name: @scenario.name)
       if request.format.html?
-        return
+        nil
       else
         file_export_response
       end
@@ -145,7 +143,7 @@ module Planning
     end
 
     def period_params
-      @now  = params[:year].present? ? "01/01/#{params[:year]}".to_date : Time.now
+      @now = params[:year].present? ? "01/01/#{params[:year]}".to_date : Time.now
       year = @now.year
       @week = params[:week]&.insert(-1, "/#{year}")
       @day = params[:day]&.insert(-1, "/#{year}")
@@ -156,11 +154,11 @@ module Planning
       from = @from
       while from <= @to
         @labels << from
-        if weekly_period
-          from = from.next_week
-        else
-          from = from + 1.day
-        end
+        from = if weekly_period
+                 from.next_week
+               else
+                 from + 1.day
+               end
       end
       @labels
     end
@@ -175,42 +173,42 @@ module Planning
     end
 
     #   # Only allow a trusted parameter "white list" through.
-      def planning_scenario_params
-        params
+    def planning_scenario_params
+      params
         .require(:scenario)
         .permit(:campaign_id,
-          :name,
-          :description,
-          scenario_activities_attributes: [
-            :id,
-            :activity_id,
-            :_destroy,
-            plots_attributes: [
-              :id,
-              :technical_itinerary_id,
-              :area,
-              :planned_at,
-              :batch_planting,
-              :_destroy,
-              batch_attributes: [
-                :id,
-                :number,
-                :day_interval,
-                :irregular_batch,
-                :_destroy,
-                irregular_batches_attributes: [
+                :name,
+                :description,
+                scenario_activities_attributes: [
                   :id,
-                  :estimated_sowing_date,
-                  :area,
+                  :activity_id,
                   :_destroy,
-                ]
-              ]
-            ]])
-      end
+                  { plots_attributes: [
+                    :id,
+                    :technical_itinerary_id,
+                    :area,
+                    :planned_at,
+                    :batch_planting,
+                    :_destroy,
+                    { batch_attributes: [
+                      :id,
+                      :number,
+                      :day_interval,
+                      :irregular_batch,
+                      :_destroy,
+                      { irregular_batches_attributes: %i[
+                        id
+                        estimated_sowing_date
+                        area
+                        _destroy
+                      ] }
+                    ] }
+                  ] }
+                ])
+    end
 
-      def find_scenario
-        @scenario = Scenario.find(params[:id] || params[:scenario_id])
-      end
-
+    def find_scenario
+      @scenario = Scenario.find(params[:id] || params[:scenario_id])
+    end
   end
 end

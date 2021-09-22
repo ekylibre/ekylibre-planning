@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Ekylibre
   module Record
     class RecordNotUpdateable < ActiveRecord::RecordNotSaved
@@ -20,7 +22,7 @@ module Ekylibre
           def protect(options = {}, &block)
             options[:on] = %i[update destroy] unless options[:on]
             code = ''.c
-            for callback in [options[:on]].flatten
+            [options[:on]].flatten.each do |callback|
               method_name = "protected_on_#{callback}?".to_sym
 
               code << "before_#{callback} :raise_exception_unless_#{callback}able?\n"
@@ -28,7 +30,7 @@ module Ekylibre
               code << "def raise_exception_unless_#{callback}able?\n"
               code << "  unless self.#{callback}able?\n"
               if options[:"allow_#{callback}_on"]
-                code << '  if self.changed.any? { |e| !' + options[:"allow_#{callback}_on"].to_s + ".include? e }\n"
+                code << "  if self.changed.any? { |e| !#{options[:"allow_#{callback}_on"]}.include? e }\n"
               end
               code << "      raise RecordNot#{callback.to_s.camelcase}able.new('Record cannot be #{callback}d', self)\n"
               code << "  end\n" if options[:"allow_#{callback}_on"]
@@ -49,7 +51,7 @@ module Ekylibre
           def secure(options = {}, &block)
             options[:on] = %i[update destroy] unless options[:on]
             code = ''.c
-            for callback in [options[:on]].flatten
+            [options[:on]].flatten.each do |callback|
               method_name = "secured_on_#{callback}?".to_sym
 
               code << "before_#{callback} :secure_#{callback}ability!\n"
@@ -73,4 +75,4 @@ module Ekylibre
     end
   end
 end
-Ekylibre::Record::Base.send(:include, Ekylibre::Record::Acts::Protected)
+Ekylibre::Record::Base.include Ekylibre::Record::Acts::Protected

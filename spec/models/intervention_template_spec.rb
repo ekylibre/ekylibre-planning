@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'rails_helper'
 
 RSpec.describe InterventionTemplate, type: :model do
@@ -5,7 +7,7 @@ RSpec.describe InterventionTemplate, type: :model do
     build(:intervention_template)
   end
 
-  it "Have a valid factory" do
+  it 'Have a valid factory' do
     expect(subject).to be_valid
   end
 
@@ -14,7 +16,7 @@ RSpec.describe InterventionTemplate, type: :model do
       subject { build(:intervention_template, name: name) }
       let(:name) { nil }
 
-      it "Have an error message" do
+      it 'Have an error message' do
         subject.valid?
         expect(subject.errors[:name]).to include("can't be blank")
       end
@@ -39,7 +41,7 @@ RSpec.describe InterventionTemplate, type: :model do
     end
 
     describe 'Campaign errors' do
-      subject { build(:intervention_template, campaign: campaign)}
+      subject { build(:intervention_template, campaign: campaign) }
       let(:campaign) { nil }
       it 'Have an error message' do
         subject.valid?
@@ -47,12 +49,12 @@ RSpec.describe InterventionTemplate, type: :model do
       end
 
       describe 'Error on change campaign' do
-        subject { create(:intervention_template)}
+        subject { create(:intervention_template) }
         it ' Have an error message' do
           template = subject
           campaign = create(:campaign)
           template.update(campaign: campaign)
-          expect(template.errors[:campaign]).to include("change_not_allowed")
+          expect(template.errors[:campaign]).to include('change_not_allowed')
         end
       end
 
@@ -61,9 +63,9 @@ RSpec.describe InterventionTemplate, type: :model do
           @technical_itinerary = create(:technical_itinerary)
           @intervention_template = create(:intervention_template)
           TechnicalItineraryInterventionTemplate
-          .create(technical_itinerary: @technical_itinerary,
-          intervention_template: @intervention_template,
-          position: 0)
+            .create(technical_itinerary: @technical_itinerary,
+                    intervention_template: @intervention_template,
+                    position: 0)
         end
 
         it 'Intervention template is valid' do
@@ -72,7 +74,7 @@ RSpec.describe InterventionTemplate, type: :model do
         end
       end
 
-      describe "Can be destroy without technical_itinerary" do
+      describe 'Can be destroy without technical_itinerary' do
         subject { create(:intervention_template) }
 
         it 'Can be destroy' do

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # == License
 # Ekylibre - Simple agricultural ERP
 # Copyright (C) 2008-2011 Brice Texier, Thibaud Merigon
@@ -18,8 +20,6 @@
 
 module Planning
   class DashboardsController < Planning::ApplicationController
-
-    def planning
-    end
+    def planning; end
   end
 end

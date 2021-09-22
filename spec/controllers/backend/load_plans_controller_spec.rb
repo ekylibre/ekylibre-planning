@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'rails_helper'
 
 RSpec.describe Backend::LoadPlansController, type: :controller do
@@ -9,7 +11,7 @@ RSpec.describe Backend::LoadPlansController, type: :controller do
       activity_production = create(:activity_production_with_template)
       get :index, format: :json
       # expect(assigns(:activity_productions)).to eq([activity_production])
-      expect(json['activity_productions'].collect{ |l| l['name'] }).to include(activity_production.name)
+      expect(json['activity_productions'].collect { |l| l['name'] }).to include(activity_production.name)
     end
   end
 
@@ -20,14 +22,14 @@ RSpec.describe Backend::LoadPlansController, type: :controller do
       intervention_template = create(:intervention_template)
       create(:product_parameter, intervention_template: intervention_template)
       TechnicalItineraryInterventionTemplate
-      .create(technical_itinerary: technical_itinerary,
-      intervention_template: intervention_template,
-      position: 0)
+        .create(technical_itinerary: technical_itinerary,
+                intervention_template: intervention_template,
+                position: 0)
       create(:activity_production_batch, activity_production: activity_production, number: 2)
       DailyChargeJob.perform_now(activity_production)
     end
 
-    describe 'without periods in params'do
+    describe 'without periods in params' do
       it 'Should render periods' do
         get :period_charges, format: :json
         expect(json['labels'].any?).to be true
@@ -41,7 +43,7 @@ RSpec.describe Backend::LoadPlansController, type: :controller do
       end
 
       it 'Should have two elements in dataset (tool and doer)' do
-        get :period_charges, { period: {from: Time.now, to: Time.now + 2.months }, format: :json }
+        get :period_charges, { period: { from: Time.now, to: Time.now + 2.months }, format: :json }
         expect(json['datasets'].count).to eq(2)
         expect(json['datasets'].first['label']).to eq('equipments')
         expect(json['datasets'].second['label']).to eq('workforce')
@@ -50,7 +52,7 @@ RSpec.describe Backend::LoadPlansController, type: :controller do
 
     describe 'With periods in params' do
       it 'Should render periods' do
-        get :period_charges, { period: {from: Time.now, to: Time.now + 2.months }, format: :json }
+        get :period_charges, { period: { from: Time.now, to: Time.now + 2.months }, format: :json }
         expect(json['labels'].any?).to be true
       end
     end

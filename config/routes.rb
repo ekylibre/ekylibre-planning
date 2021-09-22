@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 Rails.application.routes.draw do
   concern :list do
     get :list, on: :collection
@@ -8,7 +10,6 @@ Rails.application.routes.draw do
   end
 
   namespace :planning do
-
     namespace :backend do
       resources :products, concerns: %i[list unroll]
     end
@@ -19,7 +20,6 @@ Rails.application.routes.draw do
       end
     end
 
-
     resources :interventions do
       resources :product_planning, only: [] do
         member do
@@ -27,7 +27,6 @@ Rails.application.routes.draw do
         end
       end
     end
-
 
     resources :intervention_templates, concerns: :list do
       collection do
@@ -43,7 +42,6 @@ Rails.application.routes.draw do
         post :duplicate_intervention_templates
       end
     end
-
 
     resources :load_plans do
       collection do
@@ -73,7 +71,6 @@ Rails.application.routes.draw do
       end
     end
 
-
     resources :technical_itineraries, concerns: %i[list unroll] do
       collection do
         post :duplicate_intervention
@@ -85,7 +82,6 @@ Rails.application.routes.draw do
         get :duplicate
       end
     end
-
 
     resources :scenarios, concerns: :list do
       get :chart

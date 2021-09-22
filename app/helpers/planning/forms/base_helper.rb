@@ -1,7 +1,8 @@
+# frozen_string_literal: true
+
 module Planning
   module Forms
     module BaseHelper
-
       def planning_form_for(object, *args, &block)
         options = args.extract_options!
 

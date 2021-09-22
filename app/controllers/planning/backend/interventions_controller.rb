@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # == License
 # Ekylibre - Simple agricultural ERP
 # Copyright (C) 2008-2013 David Joulin, Brice Texier
@@ -18,7 +20,6 @@
 
 module Backend
   class InterventionsController < Backend::BaseController
-
     def create
       unless permitted_params[:participations_attributes].nil?
         participations = permitted_params[:participations_attributes]
@@ -42,6 +43,7 @@ module Backend
       notify = params[:intervention_proposal] ? :record_x_planned : :record_x_created
 
       return if save_and_redirect(@intervention, url: url, notify: notify, identifier: :number)
+
       render(locals: { cancel_url: { action: :index }, with_continue: true })
     end
   end

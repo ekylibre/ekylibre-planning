@@ -2,10 +2,9 @@ module Planning
   class InterventionTemplatesController < Planning::ApplicationController
     manage_restfully except: [:show], model_name: InterventionTemplate.to_s
 
-
     def self.list_conditions
       code = ''
-      code = search_conditions("intervention_template": %i[name]) + " ||= []\n"
+      code = "#{search_conditions("intervention_template": %i[name])} ||= []\n"
 
       code << "if current_campaign\n"
       code << "  c[0] << \" AND #{InterventionTemplate.table_name}.campaign_id = ?\"\n"
@@ -63,12 +62,14 @@ module Planning
     end
 
     def select_type
-      family_names = ['administering', 'plant_farming']
+      family_names = %w[administering plant_farming]
       @family_categories = []
       family_names.each do |name|
         element = {}
         element[:family] = Onoma::ActivityFamily.find(name)
-        element[:categories] = Onoma::ProcedureCategory.select { |c| c.activity_family.include?(element[:family].name.to_sym) }
+        element[:categories] = Onoma::ProcedureCategory.select do |c|
+          c.activity_family.include?(element[:family].name.to_sym)
+        end
         @family_categories << element
       end
     end
@@ -98,7 +99,9 @@ module Planning
         if @intervention_template.save
           format.json { render json: @intervention_template, status: :created }
         else
-          format.json { render json: @intervention_template.errors.full_messages, status: :unprocessable_intervention_template }
+          format.json do
+            render json: @intervention_template.errors.full_messages, status: :unprocessable_intervention_template
+          end
         end
       end
     end
@@ -110,7 +113,9 @@ module Planning
         if @intervention_template.update(permitted_params)
           format.json { render json: @intervention_template, status: :ok }
         else
-          format.json { render json: @intervention_template.errors.full_messages, status: :unprocessable_intervention_template }
+          format.json do
+            render json: @intervention_template.errors.full_messages, status: :unprocessable_intervention_template
+          end
         end
       end
     end
@@ -156,6 +161,7 @@ module Planning
 
     def duplicate
       return unless intervention_template = InterventionTemplate.find_by(id: params[:id])
+
       campaign = intervention_template.campaign.following
       @intervention_template = intervention_template.instanciate_duplicate(campaign)
       procedure
@@ -165,7 +171,8 @@ module Planning
     end
 
     def templates_of_activity
-      activity_id, campaign_id = nil, nil
+      activity_id = nil
+      campaign_id = nil
 
       if params[:options].present?
         activity_id = params[:options][:activity_id]
@@ -174,18 +181,18 @@ module Planning
 
       q = "%#{params[:q]}%".downcase
       templates = if activity_id
-        InterventionTemplate.joins(:association_activities)
-                            .where(intervention_template_activities: { activity_id: [nil, activity_id] })
-                            .where("lower(intervention_templates.name) LIKE :name",
-                            activity_id: [nil, activity_id],
-                            name: q)
-                            .where(campaign_id: campaign_id)
-      else
-        InterventionTemplate.joins(:association_activities)
-                            .where(intervention_template_activities: { activity_id: nil })
-                            .where("lower(intervention_templates.name) LIKE :name", name: q)
-                            .where(campaign_id: campaign_id)
-      end
+                    InterventionTemplate.joins(:association_activities)
+                                        .where(intervention_template_activities: { activity_id: [nil, activity_id] })
+                                        .where('lower(intervention_templates.name) LIKE :name',
+                                               activity_id: [nil, activity_id],
+                                               name: q)
+                                        .where(campaign_id: campaign_id)
+                  else
+                    InterventionTemplate.joins(:association_activities)
+                                        .where(intervention_template_activities: { activity_id: nil })
+                                        .where('lower(intervention_templates.name) LIKE :name', name: q)
+                                        .where(campaign_id: campaign_id)
+                  end
 
       templates.each do |t|
         t.is_planting = t.planting?
@@ -206,9 +213,9 @@ module Planning
         end
 
         templates = InterventionTemplate.joins(:association_activities)
-        .where("intervention_templates.id IN (?)
+                                        .where("intervention_templates.id IN (?)
         AND intervention_template_activities.activity_id IS NOT null",
-        intervention_template_ids)
+                                               intervention_template_ids)
 
         respond_to do |format|
           format.json { render json: templates.any? }
@@ -248,11 +255,10 @@ module Planning
                                                                                     :quantity,
                                                                                     :unit,
                                                                                     :_destroy,
-                                                                                    procedure: [:name, :type],
-                                                                                  ],
-                                                                                  association_activities_attributes: [:id,
-                                                                                        :activity_id,
-                                                                                        :_destroy])
+                                                                                    { procedure: %i[name type] }],
+                                                    association_activities_attributes: %i[id
+                                                                                          activity_id
+                                                                                          _destroy])
     end
   end
 end

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class AddStartedOnAndStoppedOnToActivityProduction < ActiveRecord::Migration
   def change
     add_column :activity_productions, :started_on, :date

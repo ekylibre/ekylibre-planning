@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Ekylibre
   module Record #:nodoc:
     module Bookkeep
@@ -33,20 +35,21 @@ module Ekylibre
         end
 
         def initialize(resource, action, draft)
-          raise ArgumentError, "Unvalid action #{action.inspect} (#{Ekylibre::Record::Bookkeep.actions.to_sentence} are accepted)" unless Ekylibre::Record::Bookkeep.actions.include? action
+          unless Ekylibre::Record::Bookkeep.actions.include? action
+            raise ArgumentError,
+                  "Unvalid action #{action.inspect} (#{Ekylibre::Record::Bookkeep.actions.to_sentence} are accepted)"
+          end
+
           @resource = resource
           @action = action
           @draft = draft
         end
 
         def journal_entry(journal, options = {}, &block)
-          if (options.keys & %i[if unless]).size > 1
-            raise ArgumentError, 'Options :if and :unless are incompatible.'
-          end
-          if options.key? :list
-            raise ArgumentError, 'Option :list is not supported anymore.'
-          end
+          raise ArgumentError, 'Options :if and :unless are incompatible.' if (options.keys & %i[if unless]).size > 1
+          raise ArgumentError, 'Option :list is not supported anymore.' if options.key? :list
           raise ArgumentError, 'Block is missing' unless block_given?
+
           condition = (options.key?(:if) ? options.delete(:if) : !options.delete(:unless))
           prism = options.delete(:as)
           column = options.delete(:column)
@@ -63,12 +66,13 @@ module Ekylibre
           # attributes[:state]      ||= @state
           attributes[:printed_on] ||= @resource.created_at.to_date if @resource.respond_to? :created_at
           unless attributes[:printed_on].is_a?(Date)
-            raise ArgumentError, "Date of journal_entry (printed_on) must be given. Date expected, got #{attributes[:printed_on].class.name} (#{attributes[:printed_on].inspect})"
+            raise ArgumentError,
+                  "Date of journal_entry (printed_on) must be given. Date expected, got #{attributes[:printed_on].class.name} (#{attributes[:printed_on].inspect})"
           end
+
           if condition
-            unless journal.is_a? Journal
-              raise ArgumentError, "Unknown journal: (#{journal.inspect})"
-            end
+            raise ArgumentError, "Unknown journal: (#{journal.inspect})" unless journal.is_a? Journal
+
             attributes[:journal_id] = journal.id
           end
 
@@ -87,11 +91,12 @@ module Ekylibre
             if condition && list.any? && @action != :destroy
               attributes[:items] = []
 
-              for cmd in list
+              list.each do |cmd|
                 direction = cmd.shift
                 unless %i[add_debit add_credit].include?(direction)
                   raise 'Can accept only add_debit and add_credit commands'
                 end
+
                 cmd[3] ||= {}
                 cmd[3][:credit] = true if direction == :add_credit
                 attributes[:items] << JournalEntryItem.new_for(*cmd)
@@ -131,6 +136,7 @@ module Ekylibre
         def bookkeep(options = {}, &block)
           raise ArgumentError, 'No given block' unless block_given?
           raise ArgumentError, "Wrong number of arguments (#{block.arity} for 1)" unless block.arity == 1
+
           configuration = { on: Ekylibre::Record::Bookkeep.actions, column: :accounted_at, method_name: __method__ }
           configuration.update(options) if options.is_a?(Hash)
           configuration[:column] = configuration[:column].to_s
@@ -153,10 +159,9 @@ module Ekylibre
           configuration[:on] = [configuration[:on]].flatten
           Ekylibre::Record::Bookkeep.actions.each do |action|
             next unless configuration[:on].include? action
+
             send("after_#{action}") do
-              if ::Preference[:bookkeep_automatically]
-                send(method_name, action, ::Preference[:bookkeep_in_draft])
-              end
+              send(method_name, action, ::Preference[:bookkeep_in_draft]) if ::Preference[:bookkeep_automatically]
               true
             end
           end
@@ -173,4 +178,4 @@ module Ekylibre
     end
   end
 end
-Ekylibre::Record::Base.send(:include, Ekylibre::Record::Bookkeep)
+Ekylibre::Record::Base.include Ekylibre::Record::Bookkeep

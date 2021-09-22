@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class CreateProductNatures < ActiveRecord::Migration
   def change
     create_table :product_natures do |t|

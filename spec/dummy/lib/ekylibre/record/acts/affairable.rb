@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Ekylibre
   module Record
     module Acts #:nodoc:
@@ -17,7 +19,7 @@ module Ekylibre
             options[:role] ||= options[:third].to_s
             options[:good] ||= :debit
 
-            class_name = options[:class_name] || name + 'Affair'
+            class_name = options[:class_name] || "#{name}Affair"
             foreign_key = options[:foreign_key] || :affair_id
             reflection_name = options[:reflection] || :affair
             reflection = reflect_on_association(reflection_name)
@@ -131,9 +133,10 @@ module Ekylibre
 
             # Return if deal is a debit for us
             code << "def good_deal?\n"
-            code += if options[:good] == :debit
+            code += case options[:good]
+                    when :debit
                       "  return self.deal_debit?\n"
-                    elsif options[:good] == :credit
+                    when :credit
                       "  return self.deal_credit?\n"
                     else
                       "  return self.#{options[:good]}\n"
@@ -142,11 +145,12 @@ module Ekylibre
 
             # Return if deal is a debit for us
             code << "def deal_debit?\n"
-            if options[:debit].is_a?(TrueClass)
+            case options[:debit]
+            when TrueClass
               code << "  return true\n"
-            elsif options[:debit].is_a?(FalseClass)
+            when FalseClass
               code << "  return false\n"
-            elsif options[:debit].is_a?(Symbol)
+            when Symbol
               code << "  return self.#{options[:debit]}\n"
             else
               raise ArgumentError, 'Option :debit must be boolean or Symbol'
@@ -155,11 +159,12 @@ module Ekylibre
 
             # Return if deal is a credit for us
             code << "def deal_credit?\n"
-            if options[:debit].is_a?(TrueClass)
+            case options[:debit]
+            when TrueClass
               code << "  return false\n"
-            elsif options[:debit].is_a?(FalseClass)
+            when FalseClass
               code << "  return true\n"
-            elsif options[:debit].is_a?(Symbol)
+            when Symbol
               code << "  return !self.#{options[:debit]}\n"
             end
             code << "end\n"
@@ -246,4 +251,4 @@ module Ekylibre
     end
   end
 end
-Ekylibre::Record::Base.send(:include, Ekylibre::Record::Acts::Affairable)
+Ekylibre::Record::Base.include Ekylibre::Record::Acts::Affairable

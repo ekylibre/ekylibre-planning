@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # == License
 # Ekylibre - Simple agricultural ERP
 # Copyright (C) 2008-2013 David Joulin, Brice Texier

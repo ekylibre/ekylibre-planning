@@ -1,5 +1,7 @@
+# frozen_string_literal: true
+
 json.labels human_date_labels
-json.datasets %i(tools doers) do |type|
+json.datasets %i[tools doers] do |type|
   label = type == :doers ? :workforce.tl : :equipments.tl
   charges = list_of_charge(type)
   json.label label
@@ -16,7 +18,7 @@ else
   json.title "#{:week_details_from.tl} #{@from.strftime('%d/%m')} #{:to.tl} #{@to.strftime('%d/%m')}"
 end
 
-%i(tools doers).each do |type|
+%i[tools doers].each do |type|
   json.set! type do
     charges = @daily_charges.select { |d| d.product_general_type == type.to_s.singularize }
     array = charges.group_by { |c| c.product_parameter.product_nature }.map do |product_nature, charges|

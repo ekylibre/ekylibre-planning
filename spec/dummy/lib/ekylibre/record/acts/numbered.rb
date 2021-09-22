@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Ekylibre
   module Record
     module Acts #:nodoc:
@@ -44,6 +46,7 @@ module Ekylibre
           def ensure_validity!(column, usage)
             raise "Usage #{usage} must be defined in Sequence usages" unless Sequence.usage.values.include?(usage)
             return true if columns_definition[column]
+
             Rails.logger.fatal "Method #{column.inspect} must be an existent column of the table #{table_name}"
           end
 
@@ -85,4 +88,4 @@ module Ekylibre
     end
   end
 end
-Ekylibre::Record::Base.send(:include, Ekylibre::Record::Acts::Numbered)
+Ekylibre::Record::Base.include Ekylibre::Record::Acts::Numbered

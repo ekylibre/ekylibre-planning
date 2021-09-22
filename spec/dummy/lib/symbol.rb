@@ -1,5 +1,7 @@
+# frozen_string_literal: true
+
 class Symbol
   def tl
-    self.to_s
+    to_s
   end
 end

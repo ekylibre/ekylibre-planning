@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # This migration comes from planning_engine (originally 20180124130951)
 class AddIsDuplicateToTechnicalItineraryInterventionTemplate < ActiveRecord::Migration
   def change

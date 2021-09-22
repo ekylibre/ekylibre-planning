@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'rails_helper'
 
 RSpec.describe ActivityProduction::Batch, type: :model do
@@ -5,7 +7,7 @@ RSpec.describe ActivityProduction::Batch, type: :model do
     build(:activity_production_batch)
   end
 
-  it "Have a valid factory" do
+  it 'Have a valid factory' do
     expect(subject).to be_valid
   end
 
@@ -60,9 +62,9 @@ RSpec.describe ActivityProduction::Batch, type: :model do
   describe 'Validation when irregular_batch is true' do
     subject do
       build(:activity_production_batch,
-      number: number,
-      day_interval: day_interval,
-      irregular_batch: irregular_batch)
+            number: number,
+            day_interval: day_interval,
+            irregular_batch: irregular_batch)
     end
     let(:number) { nil }
     let(:day_interval) { nil }
@@ -76,7 +78,7 @@ RSpec.describe ActivityProduction::Batch, type: :model do
         batch = create(:activity_production_batch, irregular_batch: irregular_batch)
         batch.irregular_batches.build(
           estimated_sowing_date: Time.now + rand(1..40).days,
-          area: rand(1..200),
+          area: rand(1..200)
         )
         batch
       end

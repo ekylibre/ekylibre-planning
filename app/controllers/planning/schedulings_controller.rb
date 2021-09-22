@@ -37,7 +37,7 @@ module Planning
 
     def update_intervention_dates
       interactor = Interventions::UpdateInterventionDatesInteractor
-                     .call(permitted_params)
+                   .call(permitted_params)
 
       render json: interactor.intervention if interactor.success?
       render json: interactor.error if interactor.fail?
@@ -63,10 +63,8 @@ module Planning
                                 .of_product_parameter_or_nil(params[:worker_id])
                                 .of_product_parameter_or_nil(params[:equipment_id])
 
-
       @planned_interventions = ::Interventions::PlannedInterventionsNotRealizedQuery
-                                 .call(::Intervention, @day, permitted_params)
-
+                               .call(::Intervention, @day, permitted_params)
 
       save_preferences
 
@@ -77,10 +75,10 @@ module Planning
 
     def intervention_chronologies
       @production = if params[:activity_production_id].present?
-        ActivityProduction.find(params[:activity_production_id]).support
-      else
-        LandParcel.includes(:activity_production).find params[:land_parcel_id]
-      end
+                      ActivityProduction.find(params[:activity_production_id]).support
+                    else
+                      LandParcel.includes(:activity_production).find params[:land_parcel_id]
+                    end
       @period_started_on = @production.activity_production.started_on.beginning_of_month
       @period_stopped_on = @production.activity_production.stopped_on.end_of_month
       @duration = (@period_stopped_on - @period_started_on).to_f
@@ -98,75 +96,69 @@ module Planning
       intervention_proposal = InterventionProposal.find(params[:intervention_proposal_id])
       activity = intervention_proposal.technical_itinerary_intervention_template.technical_itinerary.activity
       render partial: 'planning/schedulings/create_intervention',
-      locals: { intervention_proposal: intervention_proposal, activity: activity }
+             locals: { intervention_proposal: intervention_proposal, activity: activity }
     end
 
     def update_proposal
       intervention_proposal = InterventionProposal.find(params[:proposal_id])
       intervention_template = intervention_proposal
-        .technical_itinerary_intervention_template
-        .intervention_template
+                              .technical_itinerary_intervention_template
+                              .intervention_template
       intervention_proposal.target = params[:target]
-      %i(doers tools inputs).each do |type|
-        if params[type].present?
-          params[type].each_with_index do |p, index|
-            parameter = intervention_proposal.parameters.of_product_type(type.to_s.singularize).order(:id)[index]
-            if parameter.present?
-               if p.class == Array
-                 parameter.product_id = p.last[:product_id]
-                 parameter.quantity = p.last[:quantity]
-                 parameter.unit = p.last[:unit]
-                 parameter.intervention_template_product_parameter_id = p.last[:parameter_id]
-                 parameter.save
-               else
-                 parameter.update(product_id: p)
-               end
-             else
-               if p.class == Array
-                 intervention_proposal
-                 .parameters
-                 .build(product_type: type.to_s.singularize,
-                 product_id: p.last[:product_id],
-                 quantity: p.last[:quantity],
-                 unit: p.last[:unit],
-                 intervention_template_product_parameter_id: p.last[:parameter_id]
-                 )
-               else
-                 intervention_proposal.parameters.build(product_type: type.to_s.singularize, product_id: p)
-               end
-             end
-           end
-         end
-       end
+      %i[doers tools inputs].each do |type|
+        next unless params[type].present?
 
-      %i(outputs).each do |type|
-        if params[type].present?
-          params[type].each_with_index do |p, index|
-            parameter = intervention_proposal.parameters.of_product_type(type.to_s.singularize).order(:id)[index]
-            if parameter.present?
-              if p.class == Array
-                parameter.product_nature_variant_id = p.last[:variant_id]
-                parameter.quantity = p.last[:quantity]
-                parameter.unit = p.last[:unit]
-                parameter.intervention_template_product_parameter_id = p.last[:parameter_id]
-                parameter.save
-              else
-                parameter.update(product_id: p)
-              end
+        params[type].each_with_index do |p, index|
+          parameter = intervention_proposal.parameters.of_product_type(type.to_s.singularize).order(:id)[index]
+          if parameter.present?
+            if p.instance_of?(Array)
+              parameter.product_id = p.last[:product_id]
+              parameter.quantity = p.last[:quantity]
+              parameter.unit = p.last[:unit]
+              parameter.intervention_template_product_parameter_id = p.last[:parameter_id]
+              parameter.save
             else
-              if p.class == Array
-                intervention_proposal
-                .parameters
-                .build(product_type: type.to_s.singularize,
-                product_nature_variant_id: p.last[:variant_id],
-                quantity: p.last[:quantity],
-                unit: p.last[:unit],
-                intervention_template_product_parameter_id: p.last[:parameter_id]
-                )
-              elsif p.present?
-                intervention_proposal.parameters.build(product_type: type.to_s.singularize, product_id: p)
-              end
+              parameter.update(product_id: p)
             end
+          elsif p.instance_of?(Array)
+            intervention_proposal
+              .parameters
+              .build(product_type: type.to_s.singularize,
+                     product_id: p.last[:product_id],
+                     quantity: p.last[:quantity],
+                     unit: p.last[:unit],
+                     intervention_template_product_parameter_id: p.last[:parameter_id])
+          else
+            intervention_proposal.parameters.build(product_type: type.to_s.singularize, product_id: p)
+          end
+        end
+      end
+
+      %i[outputs].each do |type|
+        next unless params[type].present?
+
+        params[type].each_with_index do |p, index|
+          parameter = intervention_proposal.parameters.of_product_type(type.to_s.singularize).order(:id)[index]
+          if parameter.present?
+            if p.instance_of?(Array)
+              parameter.product_nature_variant_id = p.last[:variant_id]
+              parameter.quantity = p.last[:quantity]
+              parameter.unit = p.last[:unit]
+              parameter.intervention_template_product_parameter_id = p.last[:parameter_id]
+              parameter.save
+            else
+              parameter.update(product_id: p)
+            end
+          elsif p.instance_of?(Array)
+            intervention_proposal
+              .parameters
+              .build(product_type: type.to_s.singularize,
+                     product_nature_variant_id: p.last[:variant_id],
+                     quantity: p.last[:quantity],
+                     unit: p.last[:unit],
+                     intervention_template_product_parameter_id: p.last[:parameter_id])
+          elsif p.present?
+            intervention_proposal.parameters.build(product_type: type.to_s.singularize, product_id: p)
           end
         end
       end
@@ -181,13 +173,13 @@ module Planning
       intervention_proposal.save
 
       respond_to do |format|
-        format.json { render json: { response: true }}
+        format.json { render json: { response: true } }
       end
     end
 
     def new_detailed_intervention
       interactor = Interventions::BuildInterventionWithProposalInteractor
-                     .call(permitted_params)
+                   .call(permitted_params)
 
       @intervention = interactor.intervention
       if @intervention.missing_parameters.any?
@@ -200,16 +192,14 @@ module Planning
 
     def create_intervention
       interactor = Interventions::BuildInterventionWithProposalInteractor
-                     .call(permitted_params)
+                   .call(permitted_params)
 
       if interactor.fail?
         render json: { save: false, errors: interactor.error }
       else
         @intervention = interactor.intervention
 
-        if @intervention.missing_parameters.any?
-          return render json: { save: false, errors: "Missing parameters" }
-        end
+        return render json: { save: false, errors: 'Missing parameters' } if @intervention.missing_parameters.any?
 
         if @intervention.save
           notify_success(:record_x_planned,
@@ -226,18 +216,17 @@ module Planning
     def update_modal_time
       proposal = InterventionProposal.find(params[:proposal_id])
 
-      if params[:target] == 'land_parcel'
+      case params[:target]
+      when 'land_parcel'
         target_parcel = LandParcel.find(params[:value_id]) if params[:value_id].present?
-      elsif params[:target] == 'plant'
+      when 'plant'
         target_parcel = Plant.find(params[:value_id]) if params[:value_id].present?
       end
 
-      if target_parcel.present?
-        time = proposal.human_estimated_working_time(target_parcel)
-      end
+      time = proposal.human_estimated_working_time(target_parcel) if target_parcel.present?
 
       respond_to do |format|
-        format.json { render json: { time: time || '00 : 00' }}
+        format.json { render json: { time: time || '00 : 00' } }
       end
     end
 

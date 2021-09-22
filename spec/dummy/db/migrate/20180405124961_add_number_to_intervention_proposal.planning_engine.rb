@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # This migration comes from planning_engine (originally 20180404145130)
 class AddNumberToInterventionProposal < ActiveRecord::Migration
   def up

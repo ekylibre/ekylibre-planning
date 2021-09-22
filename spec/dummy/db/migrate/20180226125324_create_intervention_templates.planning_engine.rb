@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # This migration comes from planning_engine (originally 20180112135843)
 class CreateInterventionTemplates < ActiveRecord::Migration
   def change

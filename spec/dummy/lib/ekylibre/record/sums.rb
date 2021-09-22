@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Ekylibre
   module Record
     module Sums #:nodoc:
@@ -10,9 +12,10 @@ module Ekylibre
         def sums(target, children, *args)
           options = args.extract_options!
           args.each do |arg|
-            if arg.is_a?(Symbol) || arg.is_a?(String)
+            case arg
+            when Symbol, String
               options[arg.to_sym] = arg.to_sym
-            elsif arg.is_a? Hash
+            when Hash
               options.merge!(arg)
             else
               raise ArgumentError, "Unvalid type #{arg.inspect}:#{arg.class.name}"
@@ -25,7 +28,7 @@ module Ekylibre
           code = ''
 
           callbacks = options.delete(:callbacks) || %i[after_save after_destroy]
-          for callback in callbacks
+          callbacks.each do |callback|
             code << "#{callback} :#{method_name}\n"
           end
 
@@ -34,7 +37,7 @@ module Ekylibre
 
           code << "def #{method_name}\n"
           code << "  return unless self.#{target}\n"
-          code << '  ' + options.values.join(' = ') + " = 0\n"
+          code << "  #{options.values.join(' = ')} = 0\n"
           code << "  self.#{target}.reload\n"
           # code << "  #{self.name}.where(#{target_id}: self.#{target_id}).find_each do |#{record}|\n"
           # code << "  #{self.name}.where(#{target_id}: self.#{target_id}).find_each do |#{record}|\n"
@@ -66,4 +69,4 @@ module Ekylibre
   end
 end
 
-Ekylibre::Record::Base.send(:include, Ekylibre::Record::Sums)
+Ekylibre::Record::Base.include Ekylibre::Record::Sums

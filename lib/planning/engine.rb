@@ -1,15 +1,16 @@
+# frozen_string_literal: true
+
 require 'lodash-rails'
 
 module Planning
   class Engine < ::Rails::Engine
-
     config.generators do |g|
       g.test_framework :rspec
-      g.fixture_replacement :factory_bot, :dir => 'spec/factories'
+      g.fixture_replacement :factory_bot, dir: 'spec/factories'
     end
 
     initializer 'planning.assets.precompile' do |app|
-      app.config.assets.precompile += %w( planning.css planning.js )
+      app.config.assets.precompile += %w[planning.css planning.js]
     end
 
     initializer :i18n do |app|

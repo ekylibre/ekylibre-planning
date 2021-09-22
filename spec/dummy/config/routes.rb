@@ -1,6 +1,7 @@
-Rails.application.routes.draw do
+# frozen_string_literal: true
 
-  mount Planning::Engine => "/planning"
+Rails.application.routes.draw do
+  mount Planning::Engine => '/planning'
   namespace :backend do
     resources :load_plans
     namespace :load_plans do

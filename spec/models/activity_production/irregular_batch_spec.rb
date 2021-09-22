@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'rails_helper'
 
 RSpec.describe ActivityProduction::IrregularBatch, type: :model do
@@ -5,44 +7,44 @@ RSpec.describe ActivityProduction::IrregularBatch, type: :model do
     build(:activity_production_irregular_batch)
   end
 
-  it "Have a valid factory" do
+  it 'Have a valid factory' do
     expect(subject).to be_valid
   end
 
-  describe "Validate presence of estimated_sowing_date" do
+  describe 'Validate presence of estimated_sowing_date' do
     subject do
       build(:activity_production_irregular_batch, estimated_sowing_date: estimated_sowing_date)
     end
 
     let(:estimated_sowing_date) { nil }
 
-    it "Have an error message" do
+    it 'Have an error message' do
       subject.valid?
       expect(subject.errors[:estimated_sowing_date]).to include("can't be blank")
     end
   end
 
-  describe "Validate presence of area" do
+  describe 'Validate presence of area' do
     subject do
       build(:activity_production_irregular_batch, area: area)
     end
 
     let(:area) { nil }
 
-    it "Have an error message" do
+    it 'Have an error message' do
       subject.valid?
       expect(subject.errors[:area]).to include("can't be blank")
     end
   end
 
-  describe "Should have a batch" do
+  describe 'Should have a batch' do
     subject do
       build(:activity_production_irregular_batch, activity_production_batch: activity_production_batch)
     end
 
     let(:activity_production_batch) { nil }
 
-    it "Have an error message" do
+    it 'Have an error message' do
       subject.valid?
       expect(subject.errors[:activity_production_batch]).to include("can't be blank")
     end
