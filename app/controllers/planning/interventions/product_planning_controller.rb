@@ -1,9 +1,11 @@
+# frozen_string_literal: true
+
 module Planning
   module Interventions
     class ProductPlanningController < ::Backend::BaseController
       def is_planned_intervention
         interactor = Interventions::AnotherInterventionPlannedInteractor
-                       .call(permitted_params)
+                     .call(permitted_params)
 
         if interactor.fail?
           render json: { error_message: interactor.error }

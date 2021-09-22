@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class CreateActivityProductions < ActiveRecord::Migration
   def change
     create_table :activity_productions do |t|

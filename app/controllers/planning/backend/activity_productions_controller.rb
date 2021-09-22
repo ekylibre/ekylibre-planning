@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # == License
 # Ekylibre - Simple agricultural ERP
 # Copyright (C) 2008-2013 David Joulin, Brice Texier
@@ -20,7 +22,7 @@ module Backend
   class ActivityProductionsController < Backend::BaseController
     layout 'assets_injection_layout'
 
-    before_action :set_activity_production, only: [:edit, :show, :update]
+    before_action :set_activity_production, only: %i[edit show update]
 
     def new
       @activity_production = ActivityProduction.new(show_permitted_params)
@@ -28,7 +30,7 @@ module Backend
       params[:form_partial] = 'planning/backend/activity_productions/form'
     end
 
-    before_action only: [:create, :update] do
+    before_action only: %i[create update] do
       params[:form_partial] = 'planning/backend/activity_productions/form'
     end
 

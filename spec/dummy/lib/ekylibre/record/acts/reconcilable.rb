@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Ekylibre
   module Record
     module Acts #:nodoc:
@@ -87,4 +89,4 @@ module Ekylibre
     end
   end
 end
-Ekylibre::Record::Base.send(:include, Ekylibre::Record::Acts::Reconcilable)
+Ekylibre::Record::Base.include Ekylibre::Record::Acts::Reconcilable

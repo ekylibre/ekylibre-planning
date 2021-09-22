@@ -46,7 +46,7 @@ module Planning
     private
 
     def period_params
-      @now  = params[:year].present? ? "01/01/#{params[:year]}".to_date : Time.now
+      @now = params[:year].present? ? "01/01/#{params[:year]}".to_date : Time.now
       year = @now.year
       @week = params[:week]&.insert(-1, "/#{year}")
       @day = params[:day]&.insert(-1, "/#{year}")
@@ -70,11 +70,11 @@ module Planning
       @labels = []
       while from <= to
         @labels << from
-        if weekly_period
-          from = from.next_week
-        else
-          from = from + 1.day
-        end
+        from = if weekly_period
+                 from.next_week
+               else
+                 from + 1.day
+               end
       end
       @labels
     end

@@ -1,10 +1,13 @@
-json.human_week "#{:from.tl} #{I18n.l(@day.beginning_of_week, format: :default)} #{:to.tl} #{I18n.l(@day.end_of_week, format: :default)}"
+# frozen_string_literal: true
+
+json.human_week "#{:from.tl} #{I18n.l(@day.beginning_of_week,
+                                      format: :default)} #{:to.tl} #{I18n.l(@day.end_of_week, format: :default)}"
 
 json.interventions do
   (@day.beginning_of_week..@day.end_of_week).each_with_index do |day, index|
     proposal_hash = @intervention_proposals
                     .includes({ technical_itinerary_intervention_template: :intervention_template },
-                    { activity_production: [:activity, :cultivable_zone]})
+                              { activity_production: %i[activity cultivable_zone] })
                     .select { |p| p.estimated_date == day && p.intervention.nil? }
                     .map do |p|
                       intervention_template = p.technical_itinerary_intervention_template.intervention_template
@@ -37,7 +40,10 @@ json.interventions do
   end
 end
 
-json.week_days (@day.beginning_of_week..@day.end_of_week)
-  .map.with_index{ |day, index| { day: I18n.l(day, format: '%A %d %B'), formatted_day: day.to_time.strftime('%Y/%m/%d'), index: index }}
+json.week_days(@day.beginning_of_week..@day.end_of_week)
+    .map.with_index do |day, index|
+  { day: I18n.l(day, format: '%A %d %B'),
+    formatted_day: day.to_time.strftime('%Y/%m/%d'), index: index }
+end
 json.day @day
 json.formatted_day @day.to_time.strftime('%Y/%m/%d')

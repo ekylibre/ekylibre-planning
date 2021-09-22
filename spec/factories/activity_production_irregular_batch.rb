@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 FactoryBot.define do
   factory :activity_production_irregular_batch, class: 'ActivityProduction::IrregularBatch' do
     estimated_sowing_date { Time.now + 30.days }

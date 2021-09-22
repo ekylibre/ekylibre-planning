@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 FactoryBot.define do
   factory :activity_production_batch, class: ActivityProduction::Batch do
     number { rand(1..30) }

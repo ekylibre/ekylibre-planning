@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 source 'https://rubygems.org'
 
 # Declare your gem's dependencies in planning.gemspec.
@@ -24,18 +26,17 @@ group :development, :test do
 end
 
 group :test do
-  gem 'rspec-rails'
   gem 'factory_bot'
+  gem 'rspec-rails'
   # See https://github.com/rails/execjs#readme for more supported runtimes
-  gem 'therubyracer', platforms: :ruby
-  gem 'faker'
   gem 'byebug'
+  gem 'faker'
   gem 'guard-rspec'
-  gem "haml-rails", ">= 1.0"
+  gem 'haml-rails', '>= 1.0'
+  gem 'therubyracer', platforms: :ruby
 
   gem 'code_string', '>= 0.0.1'
 end
-
 
 # Declare any dependencies that are still in development here instead of in
 # your gemspec. These might include edge Rails or gems from your path or

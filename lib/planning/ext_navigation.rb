@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Planning
   class ExtNavigation
     def self.add_navigation_xml_to_existing_tree
@@ -10,9 +12,9 @@ module Planning
 
     def initialize
       @planning_navigation_tree = Ekylibre::Navigation::Tree
-                                    .load_file(planning_navigation_file_path,
-                                               :navigation,
-                                               %i[part group item])
+                                  .load_file(planning_navigation_file_path,
+                                             :navigation,
+                                             %i[part group item])
 
       @planning_xml_navigation_childrens = init_planning_navigation_childrens
     end
@@ -28,9 +30,7 @@ module Planning
       @new_navigation_tree
     end
 
-
     private
-
 
     def init_planning_navigation_childrens
       parts = navigation_to_xml.xpath('//part')
@@ -42,8 +42,8 @@ module Planning
 
     def after_part_value(planning_navigation_child)
       selected_child = @planning_xml_navigation_childrens.select do |planning_xml_navigation_child|
-                         planning_xml_navigation_child[:node].attribute('name').value == planning_navigation_child.name.to_s
-                       end
+        planning_xml_navigation_child[:node].attribute('name').value == planning_navigation_child.name.to_s
+      end
 
       selected_child.first[:after_part]
     end

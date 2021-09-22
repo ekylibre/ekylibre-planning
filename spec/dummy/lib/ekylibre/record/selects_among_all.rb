@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Ekylibre
   module Record
     module SelectsAmongAll #:nodoc:
@@ -21,6 +23,7 @@ module Ekylibre
             unless s.is_a?(Symbol) || s.is_a?(Array)
               raise ArgumentError, 'Scope must be given as a Symbol or an Array of Symbol'
             end
+
             scope << '.where(' + s.collect do |c|
               scope_columns << c.to_sym
               "#{c}: self.#{c}"
@@ -36,7 +39,7 @@ module Ekylibre
             code << "def set_#{column}\n"
             if options[:if]
               code << "  if self.#{options[:if]}\n"
-              code << pode.dig(2)
+              code << pode[2]
               code << "  else\n"
               code << "    return false\n"
               code << "  end\n"
@@ -49,7 +52,7 @@ module Ekylibre
             code << "def set_#{column}!\n"
             if options[:if]
               code << "  if self.#{options[:if]}\n"
-              code << pode.dig(2)
+              code << pode[2]
               code << "  else\n"
               code << "    fail 'Cannot selects #{column}'\n"
               code << "  end\n"
@@ -62,7 +65,7 @@ module Ekylibre
             code << "def set_#{column}_if_first\n"
             if options[:if]
               code << "  if self.#{options[:if]}\n"
-              code << pode.dig(2)
+              code << pode[2]
               code << "  end\n"
             else
               code << pode.dig
@@ -73,7 +76,7 @@ module Ekylibre
             code << "def set_#{column}_if_alone\n"
             if options[:if]
               code << "  if self.#{options[:if]}\n"
-              code << pode.dig(2)
+              code << pode[2]
               code << "  end\n"
             else
               code << pode.dig
@@ -86,7 +89,7 @@ module Ekylibre
             code << "def ensure_#{column}_uniqueness\n"
             if options[:if]
               code << "  if self.#{options[:if]}\n"
-              code << pode.dig(2)
+              code << pode[2]
               code << "  end\n"
             else
               code << pode.dig
@@ -109,4 +112,4 @@ module Ekylibre
     end
   end
 end
-Ekylibre::Record::Base.send(:include, Ekylibre::Record::SelectsAmongAll)
+Ekylibre::Record::Base.include Ekylibre::Record::SelectsAmongAll

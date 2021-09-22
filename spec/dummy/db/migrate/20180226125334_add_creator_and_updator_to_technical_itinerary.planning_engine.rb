@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # This migration comes from planning_engine (originally 20180214161453)
 class AddCreatorAndUpdatorToTechnicalItinerary < ActiveRecord::Migration
   def change

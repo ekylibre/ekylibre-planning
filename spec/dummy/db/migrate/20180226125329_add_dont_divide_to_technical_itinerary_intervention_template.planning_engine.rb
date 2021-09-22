@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # This migration comes from planning_engine (originally 20180124113015)
 class AddDontDivideToTechnicalItineraryInterventionTemplate < ActiveRecord::Migration
   def change

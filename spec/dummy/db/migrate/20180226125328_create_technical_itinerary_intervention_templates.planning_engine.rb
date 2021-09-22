@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # This migration comes from planning_engine (originally 20180116133217)
 class CreateTechnicalItineraryInterventionTemplates < ActiveRecord::Migration
   def change

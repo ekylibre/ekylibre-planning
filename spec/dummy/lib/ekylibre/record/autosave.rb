@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Ekylibre
   module Record
     module Autosave #:nodoc:
@@ -11,16 +13,18 @@ module Ekylibre
           options = { callbacks: %i[after_save after_destroy] }
           options.merge(reflections_list.delete_at(-1)) if reflections_list.last.is_a? Hash
 
-          method_name = options[:method] || 'autosave_' + reflections_list.join('_and_')
-          for callback in options[:callbacks]
+          method_name = options[:method] || "autosave_#{reflections_list.join('_and_')}"
+          options[:callbacks].each do |callback|
             code << "#{callback} :#{method_name}\n"
           end
 
           code << "def #{method_name}\n"
-          for reflection in reflections_list
+          reflections_list.each do |reflection|
             unless ref = reflect_on_association(reflection)
-              raise ArgumentError, "Reflection #{reflection.inspect} unknown (#{reflect_on_all_associations.map(&:name).to_sentence} available)"
+              raise ArgumentError,
+                    "Reflection #{reflection.inspect} unknown (#{reflect_on_all_associations.map(&:name).to_sentence} available)"
             end
+
             if ref.macro == :belongs_to || ref.macro == :has_one
               code << "  if self.#{reflection} and not (self.#{reflection}.destroyed? or self.#{reflection}.marked_for_destruction?)\n"
               code << "    unless self.#{reflection}.reload.save\n"
@@ -46,4 +50,4 @@ module Ekylibre
   end
 end
 
-Ekylibre::Record::Base.send(:include, Ekylibre::Record::Autosave)
+Ekylibre::Record::Base.include Ekylibre::Record::Autosave

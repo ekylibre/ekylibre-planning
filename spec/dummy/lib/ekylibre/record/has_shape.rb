@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Ekylibre
   module Record
     module HasShape #:nodoc:
@@ -32,7 +34,7 @@ module Ekylibre
 
         def geom_union(column_name)
           conn = connection
-          return Charta.new_geometry(conn.select_value('SELECT ST_AsEWKT(ST_Union(' + conn.quote_column_name(column_name) + ')) FROM ' + conn.quote_table_name(table_name) + ' WHERE id in (' + pluck(:id).join(',') + ')'))
+          return Charta.new_geometry(conn.select_value("SELECT ST_AsEWKT(ST_Union(#{conn.quote_column_name(column_name)})) FROM #{conn.quote_table_name(table_name)} WHERE id in (#{pluck(:id).join(',')})"))
           union = Charta.empty_geometry
           # FIXME: Quite bad, fix that for Arel
           find_each do |record|
@@ -57,6 +59,7 @@ module Ekylibre
             unless %i[point multi_point line_string multi_line_string].include?(options[:type])
               define_method "#{col}_area" do |unit = nil|
                 return 0.in(unit || :square_meter) if send(col).nil?
+
                 if unit
                   send(col).area.in(:square_meter).in(unit)
                 else
@@ -65,17 +68,15 @@ module Ekylibre
               end
 
               define_method "human_#{col}_area" do |mode = :metric|
-                area = (send(col) ? send(col + '_area') : 0.in_square_meter)
+                area = (send(col) ? send("#{col}_area") : 0.in_square_meter)
                 if mode == :imperial
                   area.in(:acre).round(3).l
-                else # metric
-                  if area > 1.in_hectare
-                    area.in_hectare.round(3).l
-                  elsif area > 1.in_are
-                    area.in_are.round(3).l
-                  else
-                    area.in_square_meter.round(3).l
-                  end
+                elsif area > 1.in_hectare # metric
+                  area.in_hectare.round(3).l
+                elsif area > 1.in_are
+                  area.in_are.round(3).l
+                else
+                  area.in_square_meter.round(3).l
                 end
               end
             end
@@ -84,36 +85,36 @@ module Ekylibre
               send(col).centroid
             end
 
-            scope col + '_overlapping', lambda { |shape|
-              where('ST_Overlaps(' + col + ', ST_GeomFromEWKT(?))', ::Charta.new_geometry(shape).to_ewkt)
+            scope "#{col}_overlapping", lambda { |shape|
+              where("ST_Overlaps(#{col}, ST_GeomFromEWKT(?))", ::Charta.new_geometry(shape).to_ewkt)
             }
 
-            scope col + '_covering', lambda { |shape, margin = 0|
+            scope "#{col}_covering", lambda { |shape, margin = 0|
               ewkt = ::Charta.new_geometry(shape).to_ewkt
               if margin > 0
                 common = 1 - margin
-                where('(ST_Overlaps(' + col + ', ST_GeomFromEWKT(ST_MakeValid(?))) AND ST_Area(ST_Intersection(' + col + ', ST_GeomFromEWKT(ST_MakeValid(?)))) / ST_Area(ST_GeomFromEWKT(ST_MakeValid(?))) >= ?)', ewkt, ewkt, ewkt, common)
+                where("(ST_Overlaps(#{col}, ST_GeomFromEWKT(ST_MakeValid(?))) AND ST_Area(ST_Intersection(#{col}, ST_GeomFromEWKT(ST_MakeValid(?)))) / ST_Area(ST_GeomFromEWKT(ST_MakeValid(?))) >= ?)", ewkt, ewkt, ewkt, common)
               else
-                where('ST_Covers(' + col + ', ST_GeomFromEWKT(ST_MakeValid(?)))', ewkt)
+                where("ST_Covers(#{col}, ST_GeomFromEWKT(ST_MakeValid(?)))", ewkt)
               end
             }
 
-            scope col + '_intersecting', lambda { |shape|
-              where('ST_Intersects(' + col + ', ST_GeomFromEWKT(ST_MakeValid(?)))', ::Charta.new_geometry(shape).to_ewkt)
+            scope "#{col}_intersecting", lambda { |shape|
+              where("ST_Intersects(#{col}, ST_GeomFromEWKT(ST_MakeValid(?)))", ::Charta.new_geometry(shape).to_ewkt)
             }
 
-            scope col + '_covered_by', lambda { |shape|
-              where('ST_CoveredBy(' + col + ', ST_GeomFromEWKT(ST_MakeValid(?)))', ::Charta.new_geometry(shape).to_ewkt)
+            scope "#{col}_covered_by", lambda { |shape|
+              where("ST_CoveredBy(#{col}, ST_GeomFromEWKT(ST_MakeValid(?)))", ::Charta.new_geometry(shape).to_ewkt)
             }
 
-            scope col + '_within', lambda { |shape|
-              where('ST_Within(' + col + ', ST_GeomFromEWKT(ST_MakeValid(?)))', ::Charta.new_geometry(shape).to_ewkt)
+            scope "#{col}_within", lambda { |shape|
+              where("ST_Within(#{col}, ST_GeomFromEWKT(ST_MakeValid(?)))", ::Charta.new_geometry(shape).to_ewkt)
             }
 
-            scope col + '_matching', lambda { |shape, margin = 0.05|
+            scope "#{col}_matching", lambda { |shape, margin = 0.05|
               ewkt = ::Charta.new_geometry(shape).to_ewkt
               common = 1 - margin
-              where('ST_Equals(' + col + ', ST_GeomFromEWKT(ST_MakeValid(?))) OR (ST_Overlaps(' + col + ', ST_GeomFromEWKT(ST_MakeValid(?))) AND ST_Area(ST_Intersection(' + col + ', ST_GeomFromEWKT(ST_MakeValid(?)))) / ST_Area(' + col + ') >= ? AND ST_Area(ST_Intersection(' + col + ', ST_GeomFromEWKT(ST_MakeValid(?)))) / ST_Area(ST_GeomFromEWKT(ST_MakeValid(?))) >= ?)', ewkt, ewkt, ewkt, common, ewkt, ewkt, common)
+              where("ST_Equals(#{col}, ST_GeomFromEWKT(ST_MakeValid(?))) OR (ST_Overlaps(#{col}, ST_GeomFromEWKT(ST_MakeValid(?))) AND ST_Area(ST_Intersection(#{col}, ST_GeomFromEWKT(ST_MakeValid(?)))) / ST_Area(#{col}) >= ? AND ST_Area(ST_Intersection(#{col}, ST_GeomFromEWKT(ST_MakeValid(?)))) / ST_Area(ST_GeomFromEWKT(ST_MakeValid(?))) >= ?)", ewkt, ewkt, ewkt, common, ewkt, ewkt, common)
             }
           end
         end
@@ -124,6 +125,7 @@ module Ekylibre
           unless id = SRID[srname]
             raise ArgumentError, "Unreferenced SRID: #{srname.inspect}"
           end
+
           id
         end
 
@@ -182,7 +184,8 @@ module Ekylibre
             code << "  return [self.#{indicator}_x_min(options), -self.#{indicator}_y_max(options), self.#{indicator}_width(options), self.#{indicator}_height(options)]\n"
             code << "end\n"
 
-            %i[x_min x_max y_min y_max to_svg to_svg_path to_gml to_kml to_geojson to_text to_binary to_ewkt centroid point_on_surface].each do |attr|
+            %i[x_min x_max y_min y_max to_svg to_svg_path to_gml to_kml to_geojson to_text to_binary to_ewkt centroid
+               point_on_surface].each do |attr|
               code << "def #{indicator}_#{attr.to_s.downcase}(options = {})\n"
               code << "  return nil unless reading = self.reading(:#{indicator}, at: options[:at])\n"
               code << "  geometry = Charta.new_geometry(reading.#{column})\n"
@@ -224,4 +227,4 @@ module Ekylibre
     end
   end
 end
-Ekylibre::Record::Base.send(:include, Ekylibre::Record::HasShape)
+Ekylibre::Record::Base.include Ekylibre::Record::HasShape

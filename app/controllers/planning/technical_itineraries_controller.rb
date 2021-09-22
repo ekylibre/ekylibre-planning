@@ -6,14 +6,14 @@ module Planning
 
     def self.list_conditions
       code = ''
-      code = search_conditions('technical_itinerary': %i[name]) + " ||= []\n"
+      code = "#{search_conditions('technical_itinerary': %i[name])} ||= []\n"
 
       code << "if current_campaign\n"
       code << "  c[0] << \" AND #{TechnicalItinerary.table_name}.campaign_id = ?\"\n"
       code << "  c << current_campaign.id\n"
       code << "end\n"
 
-      #Activity
+      # Activity
       code << "if params[:activity_id].present?\n"
       code << "  c[0] << ' AND #{TechnicalItinerary.table_name}.activity_id = ?'\n"
       code << "  c << params[:activity_id]\n"
@@ -26,7 +26,7 @@ module Planning
       t.action :edit
       t.action :destroy
       t.column :name, url: true
-      #t.column :activity, url: true
+      # t.column :activity, url: true
       t.column :human_duration, label: :duration
       t.column :total_cost
       t.column :created_at
@@ -51,9 +51,9 @@ module Planning
       model: ActivityProduction,
       conditions: { technical_itinerary_id: 'params[:id]'.c }
     ) do |t|
-      t.column :name, url: { controller: "backend/activity_productions", id: 'RECORD.id'.c }
+      t.column :name, url: { controller: 'backend/activity_productions', id: 'RECORD.id'.c }
       t.column :human_support_shape_area, label: :net_surface_area
-      #t.column :planning_working_zone_area, label: :working_area
+      # t.column :planning_working_zone_area, label: :working_area
     end
 
     def new
@@ -61,11 +61,17 @@ module Planning
       originator = TechnicalItinerary.find_by(id: params[:originator_id])
 
       if target_campaign && originator
-        @valid_duplicate_intervention_templates = originator.intervention_templates.select { |i| i.linked_intervention_template&.campaign == target_campaign }.uniq
+        @valid_duplicate_intervention_templates = originator.intervention_templates.select do |i|
+          i.linked_intervention_template&.campaign == target_campaign
+        end.uniq
 
-        @unvalid_duplicate_intervention_templates = originator.intervention_templates.select { |i| i.linked_intervention_template && i.linked_intervention_template.campaign != target_campaign }.uniq
+        @unvalid_duplicate_intervention_templates = originator.intervention_templates.select do |i|
+          i.linked_intervention_template && i.linked_intervention_template.campaign != target_campaign
+        end.uniq
 
-        @unduplicate_intervention_templates = originator.intervention_templates.select { |i| i.linked_intervention_template.blank? }.uniq
+        @unduplicate_intervention_templates = originator.intervention_templates.select do |i|
+          i.linked_intervention_template.blank?
+        end.uniq
       end
 
       if params[:modal_computed] || (@valid_duplicate_intervention_templates.present? && @unduplicate_intervention_templates.blank?)
@@ -73,20 +79,22 @@ module Planning
         intervention_templates.duplicate_collection(target_campaign)
 
         intervention_template_ids = InterventionTemplate
-        .select(:id)
-        .joins(:technical_itinerary_intervention_templates)
-        .where('technical_itinerary_intervention_templates.technical_itinerary_id = ?', originator.id)
-        .distinct(:id)
+                                    .select(:id)
+                                    .joins(:technical_itinerary_intervention_templates)
+                                    .where('technical_itinerary_intervention_templates.technical_itinerary_id = ?', originator.id)
+                                    .distinct(:id)
 
-        duplicated_intervention_templates = InterventionTemplate.where(originator_id: intervention_template_ids, campaign: target_campaign)
+        duplicated_intervention_templates = InterventionTemplate.where(originator_id: intervention_template_ids,
+                                                                       campaign: target_campaign)
 
         @technical_itinerary = originator.dup
         @technical_itinerary.campaign = target_campaign
         @technical_itinerary.originator = originator
         itinerary_templates = TechnicalItineraryInterventionTemplate
-        .where(
-        technical_itinerary: originator,
-        intervention_template: duplicated_intervention_templates.pluck(:originator_id))
+                              .where(
+                                technical_itinerary: originator,
+                                intervention_template: duplicated_intervention_templates.pluck(:originator_id)
+                              )
 
         itinerary_templates.each do |itinerary_template|
           duplicate_itinerary_template = itinerary_template.dup
@@ -96,10 +104,10 @@ module Planning
         end
       else
         @technical_itinerary = if target_campaign && originator
-          TechnicalItinerary.new(campaign: target_campaign, originator: originator)
-        else
-          TechnicalItinerary.new(campaign: current_campaign)
-        end
+                                 TechnicalItinerary.new(campaign: target_campaign, originator: originator)
+                               else
+                                 TechnicalItinerary.new(campaign: current_campaign)
+                               end
       end
       params[:namespace] = :planning
     end
@@ -110,7 +118,9 @@ module Planning
         if technical_itinerary.save
           format.json { render json: technical_itinerary, status: :created }
         else
-          format.json { render json: technical_itinerary.errors.full_messages, status: :unprocessable_technical_itinerary }
+          format.json do
+            render json: technical_itinerary.errors.full_messages, status: :unprocessable_technical_itinerary
+          end
         end
       end
     end
@@ -135,7 +145,9 @@ module Planning
         if @technical_itinerary.update(permitted_params)
           format.json { render json: @technical_itinerary, status: :ok }
         else
-          format.json { render json: @technical_itinerary.errors.full_messages, status: :unprocessable_technical_itinerary }
+          format.json do
+            render json: @technical_itinerary.errors.full_messages, status: :unprocessable_technical_itinerary
+          end
         end
       end
     end
@@ -149,6 +161,7 @@ module Planning
 
     def duplicate
       return unless @technical_itinerary = TechnicalItinerary.find_by(id: params[:id])
+
       respond_to do |format|
         format.js
       end
@@ -164,8 +177,13 @@ module Planning
       if duplicate_template[:reference_hash].present?
         templates_to_remove = templates.select { |t| t[:parent_hash] == duplicate_template[:reference_hash] }
         templates_to_remove.each do |template|
-          next_template = templates.select { |t| t[:_destroy].nil? && t[:position] > template[:position] }.sort_by { |t| t[:position] }.first
-          next_template[:day_between_intervention] = next_template[:day_between_intervention].to_i + template[:day_between_intervention].to_i if next_template.present?
+          next_template = templates.select do |t|
+                            t[:_destroy].nil? && t[:position] > template[:position]
+                          end.min_by { |t| t[:position] }
+          if next_template.present?
+            next_template[:day_between_intervention] =
+              next_template[:day_between_intervention].to_i + template[:day_between_intervention].to_i
+          end
           if template[:id].present?
             template._destroy = '1'
           else
@@ -187,7 +205,7 @@ module Planning
       position = origin_position + 1
       last_is_negative = false
 
-      valid_templates.each_with_index do |template, index|
+      valid_templates.each_with_index do |template, _index|
         if number_of_template_inserted < number_of_repetition
           if template[:day_between_intervention].to_i > diff.to_i
             while template[:day_between_intervention].to_i >= diff.to_i
@@ -199,7 +217,10 @@ module Planning
               number_of_template_inserted += 1
               position += 1
               last_is_negative = false
-              break if diff + repete_interval > template[:day_between_intervention].to_i || number_of_template_inserted == number_of_repetition
+              if diff + repete_interval > template[:day_between_intervention].to_i || number_of_template_inserted == number_of_repetition
+                break
+              end
+
               template[:day_between_intervention] = template[:day_between_intervention].to_i - diff
               diff = repete_interval
 
@@ -209,11 +230,11 @@ module Planning
             template[:day_between_intervention] = original_template_diff - diff
             new_template_diff = new_template[:day_between_intervention].to_i - repete_interval.to_i
 
-            diff = if new_template_diff > 0
-              new_template_diff
-            else
-              repete_interval.to_i - template[:day_between_intervention].to_i
-            end
+            diff = if new_template_diff.positive?
+                     new_template_diff
+                   else
+                     repete_interval.to_i - template[:day_between_intervention].to_i
+                   end
 
           else
             diff -= template[:day_between_intervention].to_i
@@ -269,15 +290,15 @@ module Planning
         :creator_id,
         :updater_id,
         :originator_id,
-        itinerary_templates_attributes: [:id,
-                                        :_destroy,
-                                        :position,
-                                        :day_between_intervention,
-                                        :intervention_template_id,
-                                        :duration,
-                                        :dont_divide_duration,
-                                        :parent_hash,
-                                        :reference_hash]
+        itinerary_templates_attributes: %i[id
+                                           _destroy
+                                           position
+                                           day_between_intervention
+                                           intervention_template_id
+                                           duration
+                                           dont_divide_duration
+                                           parent_hash
+                                           reference_hash]
       )
     end
 

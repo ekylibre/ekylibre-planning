@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class ScenarioExportJob < ApplicationJob
   queue_as :default
   include Rails.application.routes.url_helpers
@@ -8,7 +10,8 @@ class ScenarioExportJob < ApplicationJob
     filename = "#{I18n.t('labels.load_plans').parameterize}_#{scenario.name}"
     data = if format == 'ods'
              to_ods(scenario).bytes
-           else format == 'csv' || format == 'xcsv'
+           else
+             %w[csv xcsv].include?(format)
              CSV.generate(headers: true, col_sep: ';', encoding: 'UTF-8') do |csv|
                to_csv(scenario, csv)
              end
@@ -19,11 +22,11 @@ class ScenarioExportJob < ApplicationJob
                                 file: file,
                                 file_file_name: "#{filename.parameterize}.#{format}")
     user.notifications.create!(success_notification_params(document.id))
-  rescue StandardError => error
-    Rails.logger.error error
-    Rails.logger.error error.backtrace.join("\n")
-    ExceptionNotifier.notify_exception(error, data: { message: error })
-    user.notifications.create!(error_notification_params(error.message))
+  rescue StandardError => e
+    Rails.logger.error e
+    Rails.logger.error e.backtrace.join("\n")
+    ExceptionNotifier.notify_exception(e, data: { message: e })
+    user.notifications.create!(error_notification_params(e.message))
   end
 
   private
@@ -107,7 +110,6 @@ class ScenarioExportJob < ApplicationJob
           cell :unit.tl, style: :important
         end
         scenario.generate_daily_charges.each do |charge|
-
           row do
             cell charge.product_parameter.intervention_template.campaign.name
             cell charge.activity.name
