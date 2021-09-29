@@ -36,7 +36,7 @@ module Planning
     end
 
     def update_intervention_dates
-      interactor = Interventions::UpdateInterventionDatesInteractor
+      interactor = ::Interventions::UpdateInterventionDatesInteractor
                    .call(permitted_params)
 
       render json: interactor.intervention if interactor.success?
@@ -178,7 +178,7 @@ module Planning
     end
 
     def new_detailed_intervention
-      interactor = Interventions::BuildInterventionWithProposalInteractor
+      interactor = ::Interventions::BuildInterventionWithProposalInteractor
                    .call(permitted_params)
 
       @intervention = interactor.intervention
@@ -191,7 +191,7 @@ module Planning
     end
 
     def create_intervention
-      interactor = Interventions::BuildInterventionWithProposalInteractor
+      interactor = ::Interventions::BuildInterventionWithProposalInteractor
                    .call(permitted_params)
 
       if interactor.fail?
