@@ -10,10 +10,6 @@ Rails.application.routes.draw do
   end
 
   namespace :planning do
-    namespace :backend do
-      resources :products, concerns: %i[list unroll]
-    end
-
     resources :dashboards, only: [] do
       collection do
         get :planning

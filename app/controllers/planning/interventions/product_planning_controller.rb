@@ -4,7 +4,7 @@ module Planning
   module Interventions
     class ProductPlanningController < ::Backend::BaseController
       def is_planned_intervention
-        interactor = Interventions::AnotherInterventionPlannedInteractor
+        interactor = ::Interventions::AnotherInterventionPlannedInteractor
                      .call(permitted_params)
 
         if interactor.fail?

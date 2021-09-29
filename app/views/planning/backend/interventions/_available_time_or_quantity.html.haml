@@ -1,4 +1,0 @@
-= label_item(item, filters, controller_path)
-%span.amount-part
-  - date = params[:scope][:availables].first[:at]
-  = '(' + item.working_duration_info(date) + ')' unless item.time_use_in_date(date).zero?
