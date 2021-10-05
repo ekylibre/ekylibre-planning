@@ -107,7 +107,9 @@ module Planning
       if request.format.html?
         nil
       else
-        file_export_response
+        ScenarioExportJob.perform_later(@scenario, request.format.symbol.to_s, current_user)
+        notify_success(:document_in_preparation)
+        redirect_to :back
       end
     end
 
@@ -210,5 +212,6 @@ module Planning
     def find_scenario
       @scenario = Scenario.find(params[:id] || params[:scenario_id])
     end
+
   end
 end

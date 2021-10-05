@@ -7,7 +7,8 @@ class ScenarioExportJob < ApplicationJob
   protected
 
   def perform(scenario, format, user)
-    filename = "#{I18n.t('labels.load_plans').parameterize}_#{scenario.name}"
+    document_name = "#{I18n.t('labels.load_plans').parameterize}_#{scenario.name}"
+    filename = "#{I18n.t('labels.load_plans').parameterize}_#{scenario.name}.#{format}"
     data = if format == 'ods'
              to_ods(scenario).bytes
            else
@@ -17,10 +18,10 @@ class ScenarioExportJob < ApplicationJob
              end
            end
     file = StringIO.new(data)
-    document = Document.create!(key: "#{Time.now.to_i}-#{filename.parameterize}",
+    document = Document.create!(key: "#{Time.now.to_i}-#{filename}",
                                 name: filename,
                                 file: file,
-                                file_file_name: "#{filename.parameterize}.#{format}")
+                                file_file_name: filename)
     user.notifications.create!(success_notification_params(document.id))
   rescue StandardError => e
     Rails.logger.error e
