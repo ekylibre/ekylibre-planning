@@ -31,5 +31,9 @@ fra:
   labels:
     add_intervention_template: "Ajouter un modèle d'intervention"
     rotation: 'Assolement'
+    expenses_amount: 'Charges (€/Ha)'
+    revenues_amount: 'Produits (€/Ha)'
+    raw_margin: 'Marge brute (€/Ha)'
+    global_margin: 'Marge brute (€)'
   unrolls:
     planning/backend/products: "%{work_number} %{name} (%{number}) - %{container_name}"

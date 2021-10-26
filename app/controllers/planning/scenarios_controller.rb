@@ -38,6 +38,10 @@ module Planning
       t.column :parcel_name, label: :plot
       t.column :human_area, label: :human_area
       t.column :technical_itinerary, url: true
+      t.column :revenues_amount, label: :revenues_amount
+      t.column :expenses_amount, label: :expenses_amount
+      t.column :raw_margin, label: :raw_margin
+      t.column :global_margin, label: :global_margin
       t.column :batch_planting
     end
 
