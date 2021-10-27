@@ -155,10 +155,7 @@
             product_parameter = this.attributesForProcedure(procedure)[index]
             product_parameter.product_name = name
             product_parameter.showList = false
-            if procedure.is_tool_or_doer
-              product_parameter.product_nature_id = id
-            else
-              product_parameter.product_nature_variant_id = id
+            product_parameter.product_nature_variant_id = id
 
           closeChoice: (index) ->
             product_parameter = this.template.product_parameters_attributes[index]
