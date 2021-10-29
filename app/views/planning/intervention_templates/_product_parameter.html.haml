@@ -1,8 +1,13 @@
--# product_parameter
+- variant = product_parameter.product_nature_variant
 %li.cast
   .picture
-    = product_parameter_picto(product_parameter)
+    = product_parameter_picto(variant)
   .details
     = product_parameter_name_link(product_parameter)
-    %p= product_parameter.product_nature&.name || product_parameter.product_nature_variant&.name
+    %p= variant.name
     %p= "#{:quantity.tl} : #{product_parameter.quantity_with_unit}" if product_parameter.unit
+    - if variant.france_maaid.present?
+      %p
+        - pesticide = RegisteredPhytosanitaryProduct.where(france_maaid: variant.france_maaid).first
+        %span.value= (pesticide.present? ? pesticide.proper_name : '')
+    = render 'intervention_costs', product_parameter: product_parameter, nature: :intervention

@@ -37,22 +37,18 @@ module Backend
 
     def product_parameters_list
       @intervention_template.product_parameters.each do |i|
-        i.product_name = i.product_nature&.name || i.product_nature_variant&.name
+        i.product_name = i.product_nature_variant&.name
       end.to_json
     end
 
-    def product_parameter_picto(product_parameter)
-      pictogram = if product_parameter.product_nature_variant.present?
-                    product_parameter.product_nature_variant.category.pictogram
-                  elsif product_parameter.product_nature.from_nomenclature?
-                    category_label = Onoma::ProductNature.find(product_parameter.product_nature.reference_name).category
-                    Onoma::ProductNatureCategory.find(category_label).pictogram
+    def product_parameter_picto(variant)
+      pictogram = if variant.pictogram&.present?
+                    variant.pictogram
+                  elsif variant.category&.pictogram&.present?
+                    variant.category.pictogram
                   else
-                    category = product_parameter.product_nature.variants.group(:category).order('count_all DESC').limit(1).count.keys.first
-                    category&.pictogram
+                    'question'
                   end
-
-      pictogram ||= 'question'
 
       content_tag(:div, '', class: ['picto', "picto-#{pictogram}"])
     end
@@ -60,11 +56,7 @@ module Backend
     def product_parameter_name_link(product_parameter)
       procedure_name = product_parameter.procedure['name']
 
-      if product_nature = product_parameter.product_nature
-        link_to(procedure_name,
-                { controller: "backend/#{product_nature.class.table_name}", action: :show, id: product_nature.id })
-      else
-        product_nature_variant = product_parameter.product_nature_variant
+      if product_nature_variant = product_parameter.product_nature_variant
         link_to(procedure_name,
                 { controller: "backend/#{product_nature_variant.class.table_name}",
                   action: :show,
