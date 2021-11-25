@@ -62,16 +62,9 @@ module Planning
     end
 
     def select_type
-      family_names = %w[administering plant_farming]
-      @family_categories = []
-      family_names.each do |name|
-        element = {}
-        element[:family] = Onoma::ActivityFamily.find(name)
-        element[:categories] = Onoma::ProcedureCategory.select do |c|
-          c.activity_family.include?(element[:family].name.to_sym)
-        end
-        @family_categories << element
-      end
+      activity_families = Activity.pluck(:family).push("administering", "processing", "tool_maintaining").uniq
+      nomen_activity_families = Onoma::ActivityFamily.list.select{ |e| activity_families.include?(e.name)}
+      @family_categories = ListSorter.new(:activity_families, nomen_activity_families).sort
     end
 
     def new
