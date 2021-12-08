@@ -12,5 +12,8 @@
 
       = render '/planning/backend/activity_productions/batch_modal', f: f
 
-  = f.input :area, hint: 'ha', wrapper: :middle_hint
+  = f.input(:area, wrapper: :append) do
+    = f.input(:area, wrapper: :simplest)
+    = content_tag(:span, 'ha', class: 'add-on')
+
   = link_to_remove_association :delete_parcel.tl, f, { wrapper_class: 'plot' }, data: { confirm: 'are your sure ?' }
