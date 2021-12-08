@@ -2,7 +2,7 @@
   - main_toolbar do |t|
     = t.edit resource
     = t.destroy
-    = link_to 'Visualiser', planning_scenario_chart_path(resource), class: 'btn', data: { no_turbolink: true }
+    = link_to 'Visualiser', planning_scenario_chart_path(resource), class: 'btn', data: { turbolinks: "false" }
     = dropdown_menu_button(:export.ta, icon: :download) do |d|
       - d.item :export_as_odf.tl, params: params.merge(format: :ods)
       - d.item :export__charge_plan_as_csv.tl, params: params.merge(format: :csv)
