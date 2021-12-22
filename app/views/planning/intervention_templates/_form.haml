@@ -37,7 +37,7 @@ data: { template: @intervention_template.to_json,
           ':value_label': 'association.activity_label',
           ':aid': 'index',
           'v-bind:errors': 'association.errors'}
-          %a{ href: '#', '@click': 'removeAssociation(index)', 'v-if': 'canRemoveAssociation()' }
+          %a{ href: '#', '@click': 'removeAssociation(index)', 'v-if': 'canRemoveAssociation()', style: "margin-left: 60px;" }
             x
         .controls{ 'v-if': 'canAddAssociation()' }
           %a.add-association{ href:'#', '@click': 'addAssociation' }
@@ -110,4 +110,4 @@ data: { template: @intervention_template.to_json,
   - f.clear_actions!
   - f.add do
     %button.btn.primary{ 'v-on:click.prevent': 'saveTemplate', ':disabled': 'canSubmitForm()' }
-      = :create.tl
+      = controller.action_name == 'edit'  ? :edit.tl : :create.tl
