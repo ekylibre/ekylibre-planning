@@ -1,0 +1,39 @@
+eng:
+  rest:
+    actions:
+      duplication_list: "Duplicate"
+  actions:
+    planning/dashboards:
+      planning: "Planning dashboard"
+    planning/intervention_templates:
+      edit: "Modify the intervention model of %{procedure_name} - Campaign %{campaign_name}" #?
+      index: "Intervention models"
+      new: "New intervention model for %{procedure_name}" #?
+      select_type: "Intervention models" #?
+      show: "%{name} - Campaign %{campaign_name}"
+      duplicate: "New intervention model for %{procedure_name}"
+    planning/technical_itineraries:
+      edit: "Change the technical itinerary %{technical_itinerary} - Campaign %{campaign_name}"
+      index: "Cultivation itineraries"
+      new: "New cultivation itineraries"
+      show: "%{name} - Campaign %{campaign_name}"
+    planning/load_plans:
+      index: "Work plan"
+    planning/schedulings:
+      index: "Scheduling"
+      edit_specified_request: "New planning of %{procedure_name}"
+    planning/scenarios:
+      index: "Scenarios"
+      new: "New scenarios"
+      show: "%{name} - Campaign %{campaign_name}"
+      edit: "Edit scenarios : %{scenario_name}"
+      chart: "Scenario work plan %{scenario_name}"
+  labels:
+    add_intervention_template: "Add an intervention model"
+    rotation: 'Crop rotation'
+    expenses_amount: 'Expenses (€/Ha)'
+    revenues_amount: 'Revenues (€/Ha)'
+    raw_margin: 'Gross margin (€/Ha)'
+    global_margin: 'Gross margin (€)'
+  unrolls:
+    planning/backend/products: "%{work_number} %{name} (%{number}) - %{container_name}"

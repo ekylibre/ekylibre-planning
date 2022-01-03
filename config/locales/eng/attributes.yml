@@ -1,0 +1,18 @@
+eng:
+  attributes:
+    list_of_activities: "Name of the activities"
+    preparation_time: "Time to prepare"
+    average_yield: "Average yield"
+    technical_itinerary: "Technical itinerary"
+    technical_itineraries: "Technical itineraries"
+    intervention_templates_list: "List of interventions"
+    technical_itinerary_parameters: "Parameters of the cultivation itinerarie"
+    predicated_sowing_date: "Expected sowing/planting date"
+    batch_planting: "Planting of crops by lot"
+    day_interval: "Sown/planted every :"
+    estimated_sowing_date: "Expected sowing/planting date"
+    area: "Area"
+    activity_productions_list: "Productions"
+  models:
+    intervention_template:
+      label: "%{name} - Campagne %{campaign}"

@@ -1,0 +1,7 @@
+eng:
+  access:
+    resources:
+      intervention_templates: "Interventions models"
+      load_plans: "Work plan"
+      technical_itineraries: "Cultivation itineraries"
+      schedulings: "schedulings"

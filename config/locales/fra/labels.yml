@@ -52,7 +52,7 @@ fra:
     average_yield: Rendement moyen
     global_workload: Durée de travail globale
     tools_workload: Charge de travail équipements
-    doers_workload: Charge de travail main d'oeuvre
+    doers_workload: Charge de travail main d'œuvre
     service_workload: Charge de travail prestation de service
     tools_cost: Coût équipements
     doers_cost: Coût main d’œuvre
@@ -60,7 +60,7 @@ fra:
     delays: Délais
     global_cost: Coût global
     tool: Équipements
-    doer: Main d’oeuvre
+    doer: Main d’œuvre
     input: Intrant
     output: Extrant
     hours_hectare: 'h/ha'
