@@ -5,14 +5,14 @@ en:
         planning/activity_production_ext/irregular_batch:
           attributes:
             estimated_sowing_date:
-              date_should_be_after_start_date_of_production: Date should be after start date of the production
-              date_should_be_before_end_of_production: Date should be before end of production
+              date_should_be_after_start_date_of_production: "Date should be after start date of the production"
+              date_should_be_before_end_of_production: "Date should be before end of production"
         activity_production:
           attributes:
             predicated_sowing_date:
-              date_should_be_after_start_date_of_production: Date should be after start date of the production
-              date_should_be_before_end_of_production: Date should be before end of production
+              date_should_be_after_start_date_of_production: "Date should be after start date of the production"
+              date_should_be_before_end_of_production: "Date should be before end of production"
         intervention_template:
           attributes:
             base:
-              cannot_be_destroy: You cannot destroy this intervention template
+              cannot_be_destroy: "You cannot destroy this intervention template"
