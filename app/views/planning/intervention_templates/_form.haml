@@ -30,7 +30,7 @@ data: { template: @intervention_template.to_json,
           %br
           %em.small.go-inline
             = :warning_if_no_activites_choose.tl
-        .activities{ v: { for: '(association, index) in template.association_activities_attributes', if: 'association._destroy == null' }}
+        .planning-activities{ v: { for: '(association, index) in template.association_activities_attributes', if: 'association._destroy == null' }}
           %list-input{ label: '',
           url: '/backend/activities/unroll',
           'v-model': 'association.activity_id',
