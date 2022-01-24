@@ -95,7 +95,7 @@ module Planning
       else
         ScenarioExportJob.perform_later(@scenario, request.format.symbol.to_s, current_user)
         notify_success(:document_in_preparation)
-        redirect_to :back
+        redirect_back(fallback_location: root_path)
       end
     end
 
@@ -113,7 +113,7 @@ module Planning
       else
         ScenarioExportJob.perform_later(@scenario, request.format.symbol.to_s, current_user)
         notify_success(:document_in_preparation)
-        redirect_to :back
+        redirect_back(fallback_location: root_path)
       end
     end
 
