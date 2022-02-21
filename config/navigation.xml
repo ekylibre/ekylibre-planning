@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <navigation>
-  <part name="planning" after-part="production">
+  <part name="planning" icon="calendar" after-part="production">
     <page to="planning/dashboards#planning"/>
     <group name="parameters">
       <item name="intervention_templates">
