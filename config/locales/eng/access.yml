@@ -4,4 +4,5 @@ eng:
       intervention_templates: "Interventions models"
       load_plans: "Work plan"
       technical_itineraries: "Cultivation itineraries"
+      scenarios: Scenarios
       schedulings: "schedulings"
