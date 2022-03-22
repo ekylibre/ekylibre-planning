@@ -1,12 +1,14 @@
 intervention_templates:
   read:
+    dependencies:
+      - read-campaigns
+      - read-activities
     actions:
     - "planning/intervention_templates#index"
     - "planning/intervention_templates#show"
     - "planning/intervention_templates#list"
     - "planning/intervention_templates#templates_of_activity"
     - "planning/intervention_templates#interventions_have_activities"
-    - "backend/campaigns#show"
   write:
     dependencies:
       - read-intervention_templates
@@ -17,7 +19,6 @@ intervention_templates:
     - "planning/intervention_templates#edit"
     - "planning/intervention_templates#new"
     - "planning/intervention_templates#update"
-    - "backend/campaigns#show"
 
 load_plans:
   read:
@@ -31,6 +32,10 @@ load_plans:
 
 technical_itineraries:
   read:
+    dependencies:
+      - read-campaigns
+      - read-activities
+      - read-intervention_templates
     actions:
       - "planning/technical_itineraries#list_intervention_templates"
       - "planning/technical_itineraries#list_activity_productions"
@@ -38,7 +43,6 @@ technical_itineraries:
       - "planning/technical_itineraries#unroll"
       - "planning/technical_itineraries#index"
       - "planning/technical_itineraries#show"
-      - "backend/campaigns#show"
   write:
     dependencies:
       - read-technical_itineraries
@@ -49,14 +53,32 @@ technical_itineraries:
       - "planning/technical_itineraries#new"
       - "planning/technical_itineraries#update"
       - "planning/technical_itineraries#destroy"
-      - "backend/campaigns#unroll"
-      - "backend/campaigns#show"
-      - "backend/activities#unroll"
-      - "planning/intervention_templates#templates_of_activity"
-      - "planning/intervention_templates#interventions_have_activities"
+
+scenarios:
+  read:
+    dependencies:
+    - read-campaigns
+    - read-activities
+    actions:
+      - "planning/scenarios#chart"
+      - "planning/scenarios#index"
+      - "planning/scenarios#show"
+      - "planning/scenarios#list"
+      - "planning/scenarios#list_rotations"
+  write:
+    dependencies:
+    - read-technical_itineraries
+    actions:
+    - "planning/scenarios#create"
+    - "planning/scenarios#edit"
+    - "planning/scenarios#new"
+    - "planning/scenarios#update"
+    - "planning/scenarios#destroy"
 
 schedulings:
   read:
+    dependencies:
+    - read-products
     actions:
       - "planning/schedulings#available_time_or_quantity"
       - "planning/schedulings#change_week_preference"
@@ -66,10 +88,10 @@ schedulings:
       - "planning/schedulings#weekly_daily_charges"
       - "planning/schedulings#index"
       - "planning/schedulings#show"
-      - "backend/products#unroll"
   write:
     dependencies:
       - read-schedulings
+      - write-interventions
     actions:
       - "planning/schedulings#new_detailed_intervention"
       - "planning/schedulings#new_intervention"
@@ -82,12 +104,3 @@ schedulings:
       - "planning/schedulings#edit"
       - "planning/schedulings#update"
       - "planning/schedulings#destroy"
-      - "backend/products#unroll"
-      - "backend/interventions#new"
-      - "backend/interventions#create"
-      - "backend/interventions#update"
-      - "backend/interventions#compute"
-      - "backend/interventions#modal"
-      - "backend/interventions#show"
-      - "backend/interventions#edit"
-      - "backend/interventions#change_state"
