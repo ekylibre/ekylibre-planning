@@ -1,0 +1,39 @@
+@mixin flex($direction, $horizontal-alignement: center, $vertical-alignement: center) {
+
+  display: flex;
+  @if $direction == row {
+
+    html[dir="ltr"] {
+      flex-direction: row;
+    }
+
+    html[dir="rtl"] {
+      flex-direction: row;
+    }
+
+    justify-content: $horizontal-alignement;
+    align-items: $vertical-alignement;
+  }
+  @else {
+    flex-direction: column;
+    justify-content: $vertical-alignement;
+    align-items: $horizontal-alignement;
+  }
+}
+
+@mixin flex-column($horizontal-alignement: center, $vertical-alignement: center) {
+  @include flex(column, $horizontal-alignement, $vertical-alignement);
+}
+
+@mixin flex-row($horizontal-alignement: center, $vertical-alignement: center) {
+  @include flex(row, $horizontal-alignement, $vertical-alignement);
+}
+
+@mixin calc($property, $expression) {
+  #{$property}: -webkit-calc(#{$expression});
+  #{$property}: -khtml-calc(#{$expression});
+  #{$property}: -moz-calc(#{$expression});
+  #{$property}: -ms-calc(#{$expression});
+  #{$property}: -o-calc(#{$expression});
+  #{$property}: calc(#{$expression});
+}

@@ -1,4 +1,8 @@
-@import "themes/tekyla/all";
+@import "themes/tekyla/variables";
+@import "planning/mixins";
+
+$header-height: 64px;
+$toolbar-height: round($button-height * $golden-ratio);
 
 @import "planning/tekyla/backend/intervention_templates";
 @import "planning/tekyla/backend/technical_itineraries";
