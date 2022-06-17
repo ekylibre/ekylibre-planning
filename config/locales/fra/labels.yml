@@ -24,13 +24,13 @@ fra:
     planning: "Planification"
     preparation_time: "Préparation" #?
     workflow: "Débit de chantier" #?
-    day_between_intervention: "Délai apres l'intervention précédente"
+    day_between_intervention: "Délai après l'intervention précédente"
     new_intervention_template: "Nouveau modèle d'intervention"
     compared_to_planting: 'Par rapport au semis (jours) :'
     itinerary_templates: "Liste des interventions"
     distribution: Répartition
     do_not_divide: Ne pas répartir l'intervention de récolte
-    time_harvesting_repartition: Répartition de l'intervention de recolte
+    time_harvesting_repartition: Répartition de l'intervention de récolte
     total_area_rotation: Surface totale assolée
     repete: Répéter
     repete_model: Répéter le modèle d'intervention
