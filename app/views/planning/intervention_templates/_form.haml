@@ -49,9 +49,8 @@ data: { template: @intervention_template.to_json,
           *
         = :workflow.tl
       .controls
-        %input{ v: { model: 'template.workflow' }, type: :number}
-        .input-right-addon
-          ha/h
+        = f.input :workflow_value, input_html: { 'v-model': 'template.workflow_value' }, wrapper: :simplest
+        = f.input :workflow_unit, as: :radio_buttons, input_html: { 'v-model': 'template.workflow_unit' }, wrapper: :simplest
     .control-group
       %label.control-label
         = :preparation_time.tl

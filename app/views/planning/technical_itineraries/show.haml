@@ -8,6 +8,8 @@
     = attributes_list do |l|
       - l.attribute :activity, url: { controller: "backend/activities", action: :show, id: resource.activity.id }
       - l.attribute :description
+      - if resource.plant_density
+        - l.attribute :plant_density
 
   = cobbles do |c|
     - c.cobble(:technical_itinerary_parameters) do

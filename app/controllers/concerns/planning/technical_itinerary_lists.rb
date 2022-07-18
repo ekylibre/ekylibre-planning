@@ -33,6 +33,7 @@ module Planning
         t.column :created_at
         t.column :updated_at
         t.column :description
+        t.column :plant_density
       end
 
       list(
