@@ -42,9 +42,9 @@ module Backend
     end
 
     def product_parameter_picto(variant)
-      pictogram = if variant.pictogram&.present?
+      pictogram = if variant&.pictogram&.present?
                     variant.pictogram
-                  elsif variant.category&.pictogram&.present?
+                  elsif variant&.category&.pictogram&.present?
                     variant.category.pictogram
                   else
                     'question'

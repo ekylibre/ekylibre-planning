@@ -4,9 +4,9 @@
     = product_parameter_picto(variant)
   .details
     = product_parameter_name_link(product_parameter)
-    %p= variant.name
+    %p= variant.name if variant
     %p= "#{:quantity.tl} : #{product_parameter.quantity_with_unit}" if product_parameter.unit
-    - if variant.france_maaid.present?
+    - if variant&.france_maaid.present?
       %p
         - pesticide = RegisteredPhytosanitaryProduct.where(france_maaid: variant.france_maaid).first
         %span.value= (pesticide.present? ? pesticide.proper_name : '')

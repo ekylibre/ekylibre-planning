@@ -37,6 +37,7 @@
         day_between_intervention: 0,
         intervention_template_id: null,
         procedure_name: null,
+        plant_density: 4000,
         is_planting: false,
         is_harvesting: false,
         plantingDelay: 0,

@@ -27,6 +27,7 @@
       ':require': 'true',
       value_label: @technical_itinerary.activity&.name,
       ':disable': 'activityIsDisabled' }
+      = f.input :plant_density, as: :integer,  input_html: { 'v-model': 'itinerary.plant_density' }
       = f.input :description, as: :text,  input_html: { 'v-model': 'itinerary.description' }
 
   = field_set :itinerary_templates do

@@ -32,6 +32,7 @@ module Planning
       t.column :created_at
       t.column :updated_at
       t.column :description
+      t.column :plant_density
     end
 
     list(
@@ -40,10 +41,13 @@ module Planning
       order: { position: :asc },
       conditions: { technical_itinerary_id: 'params[:id]'.c }
     ) do |t|
-      t.column :human_day_between_intervention, label: :delay
+      t.column :position
+      t.column :human_day_between_intervention, label: :delay, hidden: true, class: 'center'
       t.column :intervention_template, label: :name, url: true
-      t.column :human_day_compare_to_planting, label: :day_compare_to_planting
+      t.column :day_since_start, label: :day_since_start, class: 'center'
+      t.column :human_day_compare_to_planting, label: :day_compare_to_planting, class: 'center'
       t.column :human_workflow, label: :workflow, through: :intervention_template
+      t.column :inputs_or_outputs, label: :inputs_or_outputs, hidden: true
     end
 
     list(
@@ -286,6 +290,7 @@ module Planning
         :name,
         :activity_id,
         :description,
+        :plant_density,
         :campaign_id,
         :creator_id,
         :updater_id,
