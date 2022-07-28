@@ -56,8 +56,8 @@ fra:
     service_workload: Charge de travail prestation de service
     tools_cost: Coût équipements
     doers_cost: Coût main d’œuvre
-    day_compare_to_planting: Nb jours (semis)
-    day_since_start: Nb jours (début)
+    day_compare_to_planting: Nb jours / semis
+    day_since_start: Nb jours / début de la campagne
     inputs_or_outputs: "Intrants / Extrants"
     delays: Délais
     global_cost: Coût global
