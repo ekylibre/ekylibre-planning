@@ -81,13 +81,13 @@
                   = t.procedure['name']
                   = f.simple_fields_for(f.object.send(type).new(product_id: doer_tool_product_id(type, t, intervention_proposal, index))) do |p|
                     - date = intervention_proposal.estimated_date.strftime("%Y-%m-%d %H:%M")
-                    - nature = t.product_nature
+                    - variant = t.product_nature_variant
                     - product_type = (type == :tools ? 'Equipment' : 'Worker')
                     = p.referenced_association :product,
                     label: false,
                     disabled: disable_fields,
-                    input_html: { data: { product_nature: nature.id, product_parameter_id: t.id }},
-                    source: { controller: 'planning/backend/products', scope: { of_nature: nature, availables: [at: date], actives: [type: product_type, at: date]}, partial_unroll: 'true' },
+                    input_html: { data: { product_nature_variant_id: variant.id, product_parameter_id: t.id }},
+                    source: { controller: 'backend/products', scope: { of_variant: variant, availables: [at: date], actives: [type: product_type, at: date]}, partial_unroll: 'true' },
                     new: false,
                     allow_nil: true
 
@@ -104,7 +104,7 @@
               .procedure
                 .product-name
                   %h2
-                    = t.product_nature&.name || t.product_nature_variant.name
+                    = t.product_nature_variant&.name || t.product_nature&.name || ''
                   = t.procedure['name']
                 .input-part
                   = f.simple_fields_for(f.object.inputs.new) do |p|
@@ -119,7 +119,7 @@
                     = p.referenced_association :product,
                     label: false,
                     disabled: disable_fields,
-                    input_html: {data: { product_nature: t.product_nature_variant.id, product_parameter_id: t.id }},
+                    input_html: {data: { product_nature_variant_id: t.product_nature_variant.id, product_parameter_id: t.id }},
                     source: { controller: 'backend/products', scope: { of_variant: t.product_nature_variant }},
                     new: false
 

@@ -1,1 +1,7 @@
-= beehive(:planning)
+- main_period_selector(:year)
+
+= beehive(:planning) do |b|
+  - b.cell :planning_charges_by_activity
+  - b.hbox do
+    - b.cell :planning_charges_by_nature_tool
+    - b.cell :planning_charges_by_nature_input

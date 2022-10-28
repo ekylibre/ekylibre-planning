@@ -108,7 +108,7 @@ module Planning
       %i[doers tools inputs].each do |type|
         next unless params[type].present?
 
-        params[type].each_with_index do |p, index|
+        params[type].to_unsafe_h.each_with_index do |p, index|
           parameter = intervention_proposal.parameters.of_product_type(type.to_s.singularize).order(:id)[index]
           if parameter.present?
             if p.instance_of?(Array)
@@ -137,7 +137,7 @@ module Planning
       %i[outputs].each do |type|
         next unless params[type].present?
 
-        params[type].each_with_index do |p, index|
+        params[type].to_unsafe_h.each_with_index do |p, index|
           parameter = intervention_proposal.parameters.of_product_type(type.to_s.singularize).order(:id)[index]
           if parameter.present?
             if p.instance_of?(Array)

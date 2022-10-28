@@ -4,7 +4,7 @@ module Backend
   module InterventionTemplatesHelper
     def procedure_parameters(procedure)
       procedure.parameters.map do |p|
-        next unless p.class != Procedo::Procedure::GroupParameter && !p.target?
+        next if p.class == Procedo::Procedure::GroupParameter || p.target?
 
         { name: p.human_name,
           expression: p.scope_hash,

@@ -1,0 +1,6 @@
+- if @series.any?
+  = popover_description(@title_cel, @description_cel)
+  = pie_highcharts(@series, tooltip: @tooltip_options, title: @title_cel, plot_options: { pie: @plot_options})
+  = cell_footer(:planning_charges_by_activity_cell_bottom.tl)
+- else
+  = no_data

@@ -30,10 +30,23 @@ fra:
       chart: "Plan de charges du scénario %{scenario_name}"
   labels:
     add_intervention_template: "Ajouter un modèle d'intervention"
+    balance_doer: "Cumul de temps (main d'oeuvre)"
+    balance_tool: "Cumul de temps (équipements)"
     rotation: 'Assolement'
     expenses_amount: 'Charges (€/Ha)'
     revenues_amount: 'Produits (€/Ha)'
     raw_margin: 'Marge brute (€/Ha)'
     global_margin: 'Marge brute (€)'
+    planning_charges_by_activity: "Plannification : Temps prévisionnels par activités"
+    planning_charges_by_activity_cell_title: ""
+    planning_charges_by_activity_cell_line_1: "Cumul des temps (main oeuvre et équipements) par activité et par mois"
+    planning_charges_by_activity_cell_line_2: ""
+    planning_charges_by_activity_cell_line_3: ""
+    planning_charges_by_activity_cell_line_4: ""
+    planning_charges_by_activity_cell_bottom: ""
+    planning_charges_by_nature_tool: "Plannification : Utilisations prévisionnels des équipements"
+    planning_charges_by_nature_input: "Plannification : Besoins prévisionnels en intrants"
+    planning_charges_by_nature_tool_cell_title: ""
+    planning_charges_by_nature_input_cell_title: ""
   unrolls:
     planning/backend/products: "%{work_number} %{name} (%{number}) - %{container_name}"
