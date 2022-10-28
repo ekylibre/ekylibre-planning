@@ -1,0 +1,6 @@
+- if @series.any?
+  = popover_description(@title_cel, @description_cel)
+  = column_highcharts(@series, drilldown: @drilldown, title: {text: @title}, x_axis: { type: 'category', categories: formate_and_translate(@categories) }, y_axis: {title: {text: :hours.tl}, stack_labels: {enabled: true, format: "{total} H"}, labels: { format: "{value} H" }}, legend: true, plot_options: { column: {stacking: 'normal'}})
+  = cell_footer(:planning_charges_by_activity_cell_bottom.tl)
+- else
+  = no_data

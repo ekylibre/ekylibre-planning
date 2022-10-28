@@ -2,6 +2,8 @@ module Planning
   class InterventionTemplatesController < Planning::ApplicationController
     manage_restfully except: [:show], model_name: InterventionTemplate.to_s
 
+    respond_to :html, :json, :js
+
     def self.list_conditions
       code = ''
       code = "#{search_conditions("intervention_template": %i[name])} ||= []\n"

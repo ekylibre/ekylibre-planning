@@ -81,18 +81,37 @@ module Backend
     "
     end
 
+    # get already set tool/doer in intervention proposal or
+    # get it from variant / nature or
+    # raise error if no one is present
     def doer_tool_product_id(type, product_parameter, intervention_proposal, index)
       if intervention_proposal.parameters.of_product_type(type.to_s.singularize)[index]
         product_id = intervention_proposal.parameters.of_product_type(type.to_s.singularize).order(:id)[index].product_id
+      elsif type == :doers
+        if params[:worker_id].present?
+          product_id = params[:worker_id]
+        elsif product_parameter.product_nature_variant && Worker.of_variant(product_parameter.product_nature_variant).any?
+          product_id = Worker.of_variant(product_parameter.product_nature_variant).first.id
+        elsif product_parameter.product_nature && Worker.of_nature(product_parameter.product_nature).any?
+          product_id = Worker.of_nature(product_parameter.product_nature).first.id
+        elsif Worker.any?
+          product_id = Worker.all.first.id
+        else
+          raise StandardError.new('Need a least one worker. Add a worker')
+        end
+      elsif type == :tools
+        if params[:equipment_id].present?
+          product_id = params[:equipment_id]
+        elsif product_parameter.product_nature_variant && Equipment.of_variant(product_parameter.product_nature_variant).any?
+          product_id = Equipment.of_variant(product_parameter.product_nature_variant).first.id
+        elsif product_parameter.product_nature && Equipment.of_nature(product_parameter.product_nature).any?
+          product_id = Equipment.of_nature(product_parameter.product_nature).first.id
+        elsif Equipment.any?
+          product_id = Equipment.all.first.id
+        else
+          raise StandardError.new('Need a least one equipment. Add an equipment')
+        end
       end
-      product_id ||= if type == :doers && params[:worker_id].present?
-                       worker = Worker.find params[:worker_id]
-                       params[:worker_id] if worker.nature == product_parameter.product_nature
-                     elsif type == :tools && params[:equipment_id].present?
-                       equipment = Equipment.find params[:equipment_id]
-                       params[:equipment_id] if equipment.nature == product_parameter.product_nature
-                     end
-
       product_id
     end
 

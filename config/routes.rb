@@ -9,6 +9,14 @@ Rails.application.routes.draw do
     get :unroll, on: :collection
   end
 
+  namespace :backend do
+    namespace :cells do
+      resource :planning_charges_by_activity_cell, only: :show
+      resource :planning_charges_by_nature_tool_cell, only: :show
+      resource :planning_charges_by_nature_input_cell, only: :show
+    end
+  end
+
   namespace :planning do
     resources :dashboards, only: [] do
       collection do

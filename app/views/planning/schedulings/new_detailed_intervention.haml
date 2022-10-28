@@ -1,5 +1,5 @@
 = planning_form_for @intervention, url: backend_interventions_path(intervention_proposal: true) do |f|
-  = render 'planning/backend/interventions/form', f: f
+  = render 'backend/interventions/form', f: f
 
   .actions.text-center
     = f.submit :plan.tl, class: 'btn btn-primary'

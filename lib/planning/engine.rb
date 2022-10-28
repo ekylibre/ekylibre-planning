@@ -17,6 +17,12 @@ module Planning
       app.config.i18n.load_path += Dir[Planning::Engine.root.join('config', 'locales', '**', '*.yml')]
     end
 
+    initializer :planning_beehive do |app|
+      app.config.x.beehive.cell_controller_types << :planning_charges_by_activity
+      app.config.x.beehive.cell_controller_types << :planning_charges_by_nature_tool
+      app.config.x.beehive.cell_controller_types << :planning_charges_by_nature_input
+    end
+
     initializer :extend_navigation do |_app|
       Planning::ExtNavigation.add_navigation_xml_to_existing_tree
     end

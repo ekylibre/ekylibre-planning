@@ -25,11 +25,10 @@
             %strong.value
               = resource.human_global_workload
 
-          - %i(tools doers).each do |type|
+          - %i(tools doers).each do |t|
             .big-info
-              %span.title= "#{type}_workload".tl
-              %span.value
-                = resource.human_parameter_workload(type)
+              %span.title= "#{t}_workload".tl
+              %span.value= resource.human_parameter_workload(t)
 
         .col-right
           .big-info
@@ -42,9 +41,9 @@
             %strong.value
               = resource.total_cost
 
-          - %i(tools doers).each do |type|
+          - %i(tools doers).each do |t|
             .big-info
-              %span.title= "#{type}_cost".tl
+              %span.title= "#{t}_cost".tl
               %span.value
                 _
 
