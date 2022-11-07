@@ -39,11 +39,6 @@ json.interventions do
     json.set! index, proposal_hash + planned_hash
   end
 end
-
-json.week_days(@day.beginning_of_week..@day.end_of_week)
-    .map.with_index do |day, index|
-  { day: I18n.l(day, format: '%A %d %B'),
-    formatted_day: day.to_time.strftime('%Y/%m/%d'), index: index }
-end
+json.week_days @week_days
 json.day @day
 json.formatted_day @day.to_time.strftime('%Y/%m/%d')
