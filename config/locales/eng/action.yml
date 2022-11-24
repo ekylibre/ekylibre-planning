@@ -35,5 +35,6 @@ eng:
     revenues_amount: 'Revenues (€/Ha)'
     raw_margin: 'Gross margin (€/Ha)'
     global_margin: 'Gross margin (€)'
+    technical_itinerary_sheet: "Technical itinerary sheet"
   unrolls:
     planning/backend/products: "%{work_number} %{name} (%{number}) - %{container_name}"

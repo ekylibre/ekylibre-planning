@@ -1,8 +1,11 @@
 .technical-itinerary-show
-  -main_toolbar do |t|
+  - main_toolbar do |t|
     = t.edit resource
     = t.duplicate id: :duplicate_technical_itinerary if resource.is_duplicatable?
     = t.destroy
+    = dropdown_menu_button(:documents.tl, main_class: "btn btn-default icn btn-print", force_menu: true) do |d|
+      - if @technical_itinerary_document
+        - d.item :technical_itinerary_sheet.tl, { controller: :technical_itineraries, action: :show, key: Printers::TechnicalItineraryPrinter.build_key(campaign: current_campaign, technical_itinerary_ids: [resource.id]), format: :pdf }, remote: false
 
   = main_informations do
     = attributes_list do |l|

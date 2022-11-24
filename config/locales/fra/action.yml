@@ -48,5 +48,6 @@ fra:
     planning_charges_by_nature_input: "Plannification : Besoins prévisionnels en intrants"
     planning_charges_by_nature_tool_cell_title: ""
     planning_charges_by_nature_input_cell_title: ""
+    technical_itinerary_sheet: "Fiche ITK"
   unrolls:
     planning/backend/products: "%{work_number} %{name} (%{number}) - %{container_name}"
