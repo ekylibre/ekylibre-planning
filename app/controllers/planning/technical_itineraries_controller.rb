@@ -1,5 +1,6 @@
 module Planning
   class TechnicalItinerariesController < Planning::ApplicationController
+    include ApplicationHelper
     manage_restfully except: [:show], model_name: TechnicalItinerary.to_s
 
     unroll model: 'technical_itinerary'
@@ -129,9 +130,37 @@ module Planning
       end
     end
 
+    def index
+      # 'TechnicalItineraryPrinter' printer are localize in eky/app/services/printers
+      # and 'technical_itinerary_sheet' template are localize in eky/config/locales/fra/printers
+      # params [technical_itinerary_ids] Array of ids of TechnicalItinerary
+      # params [campaign] Campaign
+      @technical_itinerary_document = DocumentTemplate.find_by(nature: :technical_itinerary_sheet)
+      @technical_itineraries_of_campaign = TechnicalItinerary.of_campaign(current_campaign)
+      respond_to do |format|
+        format.html
+        format.pdf {
+          return unless @technical_itinerary_document
+
+          PrinterJob.perform_later('Printers::TechnicalItineraryPrinter', template: @technical_itinerary_document, technical_itinerary_ids: @technical_itineraries_of_campaign.pluck(:id), campaign: current_campaign, perform_as: current_user)
+          notify_success(:document_in_preparation)
+          redirect_to action: :index
+        }
+      end
+    end
+
     def show
       find_technical_itinerary
-      t3e(name: @technical_itinerary.name, campaign_name: @technical_itinerary.campaign.name)
+      @technical_itinerary_document = DocumentTemplate.find_by(nature: :technical_itinerary_sheet)
+      if request.format.html?
+        t3e(name: @technical_itinerary.name, campaign_name: @technical_itinerary.campaign.name)
+      elsif request.format.pdf?
+        return unless @technical_itinerary_document
+
+        PrinterJob.perform_later('Printers::TechnicalItineraryPrinter', template: @technical_itinerary_document, technical_itinerary_ids: [@technical_itinerary.id], campaign: current_campaign, perform_as: current_user)
+        notify_success(:document_in_preparation)
+        redirect_to action: :show
+      end
     end
 
     def edit

@@ -1,7 +1,11 @@
 planning_dashboard:
   read:
+    dependencies:
+    - read-campaigns
+    - read-activities
     actions:
     - "planning/dashboards#planning"
+
 intervention_templates:
   read:
     dependencies:
