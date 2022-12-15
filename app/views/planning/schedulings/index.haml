@@ -5,7 +5,7 @@
   .schedulings-calendar-filters
     .week-selectors
       - button_disabled = false
-      - button_disabled = true unless can_edit?(params)
+      - button_disabled = true unless can_edit?
       = link_to(:add_intervention_request.tl, new_backend_intervention_path(nature: :request), disabled: button_disabled, class: 'btn')
 
       .selectors-btn
@@ -58,7 +58,7 @@
 
 
     - disable_draggable = "false"
-    - unless can_edit?(params)
+    - unless can_edit?
       - disable_draggable = "true"
 
     .datas-columns{'v-bind:class': "{ 'columns-empty': all_columns_empty == true }"}
