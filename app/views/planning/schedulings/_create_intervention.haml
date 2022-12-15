@@ -1,7 +1,7 @@
 = modal_header(intervention_modal_title(intervention_proposal))
 
 - disable_fields = false
-- disable_fields = true unless can_edit?(params)
+- disable_fields = true unless can_edit?
 
 
 .modal-body.modal-proposed-intervention{ data: { date: intervention_proposal.estimated_date,
@@ -165,7 +165,7 @@
 
 .modal-footer
   - button_disabled = false
-  - button_disabled = true unless can_edit?(params)
+  - button_disabled = true unless can_edit?
   = link_to :save.tl, '#', disabled: button_disabled, class: "btn btn-default", id: 'save-intervention-proposal'
   = link_to :more_details.tl, '#', disabled: button_disabled, class: "btn btn-default", id: 'new-detailed-intervention'
   = link_to :plan.tl, '#', disabled: button_disabled, class: "btn btn-primary", id: 'plan-intervention'
