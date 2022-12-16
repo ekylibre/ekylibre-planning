@@ -15,7 +15,7 @@ gem 'pg', '~> 1.0' # Needed for some tasks
 
 gem 'coffee-rails', '~> 4.1'
 
-gem 'simple_form', '~> 3.4'
+gem 'simple_form', '~> 4.0'
 
 gem 'lodash-rails'
 

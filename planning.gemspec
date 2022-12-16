@@ -23,7 +23,7 @@ Gem::Specification.new do |s|
   s.add_dependency 'jbuilder'
   s.add_dependency 'lodash-rails'
   s.add_dependency 'onoma'
-  s.add_dependency 'rails', '~> 5.1.7'
+  s.add_dependency 'rails', '~> 5.2'
   s.add_dependency 'sassc-rails', '~> 2.0'
   s.add_dependency 'vuejs-rails'
 
