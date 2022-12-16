@@ -29,7 +29,7 @@ module Planning
       t.column :name, url: true
       # t.column :activity, url: true
       t.column :human_duration, label: :duration
-      t.column :total_cost
+      # t.column :total_cost
       t.column :created_at
       t.column :updated_at
       t.column :description

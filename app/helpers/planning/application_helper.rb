@@ -2,11 +2,9 @@
 
 module Planning
   module ApplicationHelper
-    def can_edit?(params)
-      edit_params = params
-      edit_params[:action] = :edit
-
-      authorized?(edit_params)
+    def can_edit?
+      url_options = { controller: controller_path, action: :edit }
+      authorized?(url_options)
     end
   end
 end

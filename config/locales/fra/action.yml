@@ -37,17 +37,17 @@ fra:
     revenues_amount: 'Produits (€/Ha)'
     raw_margin: 'Marge brute (€/Ha)'
     global_margin: 'Marge brute (€)'
-    planning_charges_by_activity: "Plannification : Temps prévisionnels par activités"
+    planning_charges_by_activity: "Planification : Temps prévisionnels par activité"
     planning_charges_by_activity_cell_title: ""
     planning_charges_by_activity_cell_line_1: "Cumul des temps (main oeuvre et équipements) par activité et par mois"
     planning_charges_by_activity_cell_line_2: ""
     planning_charges_by_activity_cell_line_3: ""
     planning_charges_by_activity_cell_line_4: ""
     planning_charges_by_activity_cell_bottom: ""
-    planning_charges_by_nature_tool: "Plannification : Utilisations prévisionnels des équipements"
-    planning_charges_by_nature_input: "Plannification : Besoins prévisionnels en intrants"
+    planning_charges_by_nature_tool: "Planification : Utilisation prévisionnelle des équipements"
+    planning_charges_by_nature_input: "Planification : Besoins prévisionnels en intrants"
     planning_charges_by_nature_tool_cell_title: ""
     planning_charges_by_nature_input_cell_title: ""
-    technical_itinerary_sheet: "Fiche ITK"
+    technical_itinerary_sheet: "Fiche itinéraires techniques"
   unrolls:
     planning/backend/products: "%{work_number} %{name} (%{number}) - %{container_name}"
