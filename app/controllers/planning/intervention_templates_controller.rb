@@ -60,7 +60,7 @@ module Planning
       t.column :created_at
       t.column :human_duration, label: :duration
       t.column :activity
-      t.column :total_cost
+      # t.column :total_cost
     end
 
     def select_type
