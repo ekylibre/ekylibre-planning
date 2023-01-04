@@ -23,7 +23,16 @@ module Planning
       code.c
     end
 
-    list(conditions: list_conditions, model: TechnicalItinerary, order: { created_at: :desc }) do |t|
+    list(conditions: list_conditions, 
+         model: TechnicalItinerary,
+         joins: <<-SQL,
+           LEFT JOIN "technical_itinerary_intervention_templates" ON "technical_itinerary_intervention_templates"."technical_itinerary_id" = "technical_itineraries"."id"
+           LEFT JOIN "intervention_templates" ON "intervention_templates"."id" = "technical_itinerary_intervention_templates"."intervention_template_id"
+           LEFT JOIN "intervention_template_product_parameters" ON "intervention_template_product_parameters"."intervention_template_id" = "intervention_templates"."id"
+           LEFT JOIN "product_nature_variants" ON "product_nature_variants"."id" = "intervention_template_product_parameters"."product_nature_variant_id"
+         SQL
+         distinct: true,
+         order: { created_at: :desc }) do |t|
       t.action :edit
       t.action :destroy
       t.column :name, url: true
