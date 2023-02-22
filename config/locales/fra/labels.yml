@@ -1,5 +1,7 @@
 fra:
   labels:
+    technical_itinerary: "Itinéraire cultural"
+    pick_reference_technical_itinerary: "Importer un itinéraire cultural de référence"
     add_plot: Ajouter une parcelle
     plot: Parcelle
     human_area: Surface

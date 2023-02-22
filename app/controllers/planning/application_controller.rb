@@ -5,5 +5,6 @@ module Planning
     protect_from_forgery with: :exception
 
     layout 'assets_injection_layout'
+    include Pickable
   end
 end

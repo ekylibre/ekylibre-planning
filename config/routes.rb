@@ -9,6 +9,13 @@ Rails.application.routes.draw do
     get :unroll, on: :collection
   end
 
+  concern :incorporate do
+    collection do
+      get :pick
+      post :incorporate
+    end
+  end
+
   namespace :backend do
     namespace :cells do
       resource :planning_charges_by_activity_cell, only: :show
@@ -75,7 +82,7 @@ Rails.application.routes.draw do
       end
     end
 
-    resources :technical_itineraries, concerns: %i[list unroll] do
+    resources :technical_itineraries, concerns: %i[incorporate list unroll] do
       collection do
         post :duplicate_intervention
       end

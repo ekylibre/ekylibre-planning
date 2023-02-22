@@ -5,6 +5,8 @@ module Planning
 
     unroll model: 'technical_itinerary'
 
+    importable_from_lexicon :technical_workflows, primary_key: :reference_name, use_campaign: true
+
     def self.list_conditions
       code = ''
       code = "#{search_conditions('technical_itinerary': %i[name])} ||= []\n"
@@ -23,7 +25,7 @@ module Planning
       code.c
     end
 
-    list(conditions: list_conditions, 
+    list(conditions: list_conditions,
          model: TechnicalItinerary,
          joins: <<-SQL,
            LEFT JOIN "technical_itinerary_intervention_templates" ON "technical_itinerary_intervention_templates"."technical_itinerary_id" = "technical_itineraries"."id"
