@@ -2,6 +2,7 @@
 
 - main_toolbar do |t|
   = tool_to(:add_technical_itinerary.tl, { controller: :technical_itineraries, action: :new }, icon: :plus)
+  = t.pick label: :pick_reference_technical_itinerary.tl, params: { current_campaign: current_campaign.harvest_year, redirect_show_path: "/#{controller_path}", redirect_edit_path: planning_technical_itineraries_path, selector_label: :technical_itinerary.tl }
 
   = dropdown_menu_button(:documents.tl, main_class: "btn btn-default icn btn-print", force_menu: true) do |d|
     - if @technical_itinerary_document && @technical_itineraries_of_campaign

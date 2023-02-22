@@ -16,6 +16,7 @@ fra:
       edit: "Modifier l'itinéraire cultural %{technical_itinerary} - Campagne %{campaign_name}"
       index: "Itinéraires culturaux"
       new: "Nouvel itinéraire cultural"
+      pick: "Importer un itinéraire cultural de référence"
       show: "%{name} - Campagne %{campaign_name}"
     planning/load_plans:
       index: "Plan de charges"

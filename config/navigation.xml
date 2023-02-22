@@ -19,6 +19,7 @@
         <page to="planning/technical_itineraries#new" nonexistent="true"/>
         <page to="planning/technical_itineraries#edit" nonexistent="true"/>
         <page to="planning/technical_itineraries#show" nonexistent="true"/>
+        <page to="planning/technical_itineraries#pick" nonexistent="true"/>
       </item>
     </group>
     <group name="prevision" icon="bar-chart">
