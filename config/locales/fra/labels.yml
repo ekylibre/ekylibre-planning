@@ -9,6 +9,7 @@ fra:
     add_scenario_activity: Ajouter une activité
     duplicate_technical_itinerary: Dupliquer l'itinéraire cultural sélectionné
     duplicate_on_campaign: Dupliquer sur la campagne
+    duplicate_on_campaign_informations: "Pour dupliquer cet itinéraire technique sur une autre campagne, veuillez ouvrir au préalable l'activité sur cette campagne"
     duplicate_selected_intervention_models: Dupliquer les modèles d'interventions sélectionnés
     add_intervention_template: "Enregistrer un modèle d'intervention"
     intervention_templates_was_duplicated: Les modèles d'interventions ont été dupliqués

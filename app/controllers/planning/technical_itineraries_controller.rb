@@ -72,6 +72,7 @@ module Planning
       # t.column :planning_working_zone_area, label: :working_area
     end
 
+    # use by new and duplicate method
     def new
       target_campaign = Campaign.find_by(id: params[:campaign_id])
       originator = TechnicalItinerary.find_by(id: params[:originator_id])

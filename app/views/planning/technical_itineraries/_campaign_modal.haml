@@ -3,8 +3,11 @@
     .modal-header
       %h4.modal-title= :duplicate_technical_itinerary.tl
     .modal-body
+      .alert-message
+        .alert-title
+          %b= :duplicate_on_campaign_informations.tl
       = label_tag(:duplicate_on_campaign.tl)
-      = select_tag(:campaign_id, options_from_collection_for_select(@technical_itinerary.campaign.followings, :id, :name))
+      = select_tag(:campaign_id, options_from_collection_for_select(@technical_itinerary.campaign.current_and_followings, :id, :name))
       = hidden_field_tag(:originator_id, @technical_itinerary.id)
     .modal-footer
       = button_tag(:cancel.tl, class: 'btn btn-default', data: { dismiss: 'modal' })
